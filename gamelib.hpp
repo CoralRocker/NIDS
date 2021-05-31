@@ -21,6 +21,23 @@ const short SCREEN_WIDTH = 640;//1152;
 const short SCREEN_HEIGHT = 480;//852;
 extern bool DEBUG; // Used to be const, but better to be on/off-able.
 
+enum ColorCodes{
+	BLACK,
+	WHITE,
+	RED,
+	GREEN, 
+	BLUE,
+	PURPLE,
+	YELLOW,
+	LBLUE,
+	PRED,
+	ORANGE,
+	LGREEN,
+
+	COLOR_MAX
+};
+extern const SDL_Color colors[COLOR_MAX];
+
 enum errCodes
 {
 	SUCCESS,
@@ -42,7 +59,7 @@ extern TTF_Font* fontLrg, *fontMed, *fontSml;
 extern bool game_pause;
 
 
-void renderText(SDL_Rect position, const char* str, SDL_Color clr, TTF_Font* font, textModes mode=TXT_LEFT);
+void renderText(SDL_Rect position, const char* str, ColorCodes clrcd, TTF_Font* font, textModes mode=TXT_LEFT);
 void drawCircle(uint16_t x0, uint16_t y0, uint16_t r, bool filled=false);
 
 float dsin(float direction);

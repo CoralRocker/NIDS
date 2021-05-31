@@ -118,9 +118,6 @@ int main(int argc, char** argv){
 							printf("Frame_no: %u\n", frame);
 							printf("Time of last frame (ms): %u\n", elapsed);
 							if(DEBUG) printf("High-Perf time of last frame (ms): %f\n\n", elapsed64); else puts("");
-							// uint16_t objID = 0x0000; // ID Of object to find.
-							// tmpObj = (Object*)*std::find_if(objects.begin(), objects.end(), [](void* ptr){return ((Object*)ptr)->id == objID;});
-							// printf("Naomi Depth: %d\nWall Depth: %d\n", naomi->depth, tmpObj->depth);
 							break;
 					}
 			}
@@ -141,7 +138,6 @@ int main(int argc, char** argv){
 		for(std::vector<void*>::iterator it = objects.begin(); it != objects.end(); it++){
 			if(((Object*)*it)->id == 0xFFFF){
 				((Naomi*)*it)->step();
-				// printf("Naomi draw index: %d\n", std::distance(objects.begin(), it));
 			}else{
 				((Object*)*it)->step();
 			}
@@ -170,9 +166,7 @@ int main(int argc, char** argv){
 			end64 = SDL_GetPerformanceCounter();
 			elapsed64 = (double)((end64-start64)*1000)/cps;
 		}
-		// if(DEBUG) printf("Elapsed: %.5f\n", elapsed);
 		if(elapsed < tpf){	
-			// if(DEBUG) puts("Delaying");
 			SDL_Delay(tpf - elapsed);
 		}
 	}

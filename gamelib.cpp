@@ -23,7 +23,22 @@ bool game_pause = false, DEBUG=false;
 
 std::vector<void*> objects;
 
-void renderText(SDL_Rect position, const char* str, SDL_Color clr, TTF_Font* font, textModes mode){
+const SDL_Color colors[COLOR_MAX] = {
+	{0,0,0,255}, {255, 255, 255, 255},
+	{255, 0, 0, 255}, 
+	{0, 128, 0, 255},
+	{0, 0, 255, 255},
+	{128, 0, 128, 255},
+	{249, 214, 45, 0},
+	{0, 219, 221, 255},
+	{253, 134, 134, 255},
+	{255, 167, 124, 255},
+	{181, 212, 102, 255}
+};
+
+void renderText(SDL_Rect position, const char* str, ColorCodes clrcd, TTF_Font* font, textModes mode){
+	SDL_Color clr = colors[clrcd];
+
 	SDL_Surface* textSurface = TTF_RenderText_Blended(font, str, clr);
 	if(textSurface == NULL){
 		printf("Err could not create surface from text. ERR: %s\n", TTF_GetError());

@@ -114,7 +114,7 @@ void Menu::draw(){
 	char* str = new char[32];
 	sprintf(str, "Paused: %s", *pause ? "True" : "False");
 	// if(DEBUG) puts(str);
-	renderText({0, 0, 0,0}, str, {0,0,0,255}, fontSml);
+	renderText({0, 0, 0,0}, str, LBLUE, fontSml);
 	delete[] str;
 
 
@@ -131,15 +131,15 @@ void Menu::draw(){
 		switch(i){
 			case 0:
 				if(i == sel[0]) fnt = fontLrg; else fnt = fontMed;
-				renderText({SCREEN_WIDTH/4, SCREEN_HEIGHT - 48, 0,0}, "OBJECTS", {0,0,0,255}, fnt, TXT_MIDDLE);
+				renderText({SCREEN_WIDTH/4, SCREEN_HEIGHT - 48, 0,0}, "OBJECTS", PRED, fnt, TXT_MIDDLE);
 				break;
 			case 1:
 				if(i == sel[0]) fnt = fontLrg; else fnt = fontMed;
-				renderText({SCREEN_WIDTH/2, SCREEN_HEIGHT - 48, 0,0}, "OPTIONS", {0,0,0,255}, fnt, TXT_MIDDLE);
+				renderText({SCREEN_WIDTH/2, SCREEN_HEIGHT - 48, 0,0}, "OPTIONS", ORANGE, fnt, TXT_MIDDLE);
 				break;
 			case 2:
 				if(i == sel[0]) fnt = fontLrg; else fnt = fontMed;
-				renderText({SCREEN_WIDTH/4 * 3, SCREEN_HEIGHT - 48, 0,0}, "SAVE & EXIT", {0,0,0,255}, fnt, TXT_MIDDLE);
+				renderText({SCREEN_WIDTH/4 * 3, SCREEN_HEIGHT - 48, 0,0}, "SAVE & EXIT", YELLOW, fnt, TXT_MIDDLE);
 				break;
 
 		}
@@ -156,19 +156,19 @@ void Menu::draw(){
 				if(indx < 0) indx = OBJ_MAX + sel[1] - 2; // Correct for indexes less than 2;
 				for(int i = 0; i < 5; i++){
 					fnt = (i == 2) ? fontMed : fontSml;
-					renderText({SCREEN_WIDTH/4, SCREEN_HEIGHT - 96 - (tBox.h/6 * (i+1)),0,0}, obj_names[indx], {0,0,0,255}, fnt, TXT_MIDDLE);
+					renderText({SCREEN_WIDTH/4, SCREEN_HEIGHT - 96 - (tBox.h/6 * (i+1)),0,0}, obj_names[indx], BLACK, fnt, TXT_MIDDLE);
 					indx++;
 					if(indx == OBJ_MAX) indx = 0;
 				}
 				break;
 				}
 			case 1:
-				tBox = stretch(0.75, 0.5);
+				tBox = stretch(0.75, 1);
 				tBox.x = SCREEN_WIDTH/2 - tBox.w/2;
 				tBox.y = SCREEN_HEIGHT - 96 - tBox.h;
 				SDL_RenderCopy(winRenderer, textBox, NULL, &tBox);
-
-				renderText({SCREEN_WIDTH/2, SCREEN_HEIGHT - 96 - tBox.h/2, 0,0}, "NULL", {0, 0, 0, 255}, fontLrg, TXT_MIDDLE);
+				
+				renderText({SCREEN_WIDTH/2, SCREEN_HEIGHT - 96 - tBox.h/2, 0,0}, "NULL", BLACK, fontLrg, TXT_MIDDLE);
 				break;
 			case 2:
 				tBox = stretch(0.75, 0.5);
@@ -176,7 +176,7 @@ void Menu::draw(){
 				tBox.y = SCREEN_HEIGHT - 96 - tBox.h;
 				SDL_RenderCopy(winRenderer, textBox, NULL, &tBox);
 				
-				renderText({SCREEN_WIDTH/4 * 3, SCREEN_HEIGHT - 96 - tBox.h/2, 0,0}, "EXIT?", {0, 0, 0, 255}, fontLrg, TXT_MIDDLE);
+				renderText({SCREEN_WIDTH/4 * 3, SCREEN_HEIGHT - 96 - tBox.h/2, 0,0}, "EXIT?", BLACK, fontLrg, TXT_MIDDLE);
 				break;
 		}
 	}

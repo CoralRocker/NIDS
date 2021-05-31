@@ -170,18 +170,18 @@ bool init(){
 						printf("Err could not init TTF. ERR: %s\n", TTF_GetError());
 						success = false;
 					}else{
-						fontLrg = TTF_OpenFont("Oxygen-Regular.ttf", 36);
+						fontLrg = TTF_OpenFont("fonts/Oxygen-Regular.ttf", 36);
 						if(!fontLrg){
 							printf("Err could not load large font. ERR %s\n", TTF_GetError());
 							success = false;
 						}
 						
-						fontMed = TTF_OpenFont("Oxygen-Regular.ttf", 24);
+						fontMed = TTF_OpenFont("fonts/Oxygen-Regular.ttf", 24);
 						if(!fontMed){
 							printf("Err could not load medium font. ERR %s\n", TTF_GetError());
 							success = false;
 						}
-						fontSml = TTF_OpenFont("Oxygen-Regular.ttf", 12);
+						fontSml = TTF_OpenFont("fonts/Oxygen-Regular.ttf", 12);
 						if(!fontSml){
 							printf("Err could not load small font. ERR %s\n", TTF_GetError());
 							success = false;

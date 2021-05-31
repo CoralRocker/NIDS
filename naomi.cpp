@@ -186,7 +186,9 @@ void Naomi::input(SDL_Keycode sym){
 			break;
 		case SDLK_SPACE:
 			if(objtype == OBJ_MAX) break;
-			if(heldObject) heldObject = NULL; else objectPlace(); // Release grasp of object if we're holding one
+			puts("Space");
+			printf("HeldObject: %p\n", heldObject);
+			if(heldObject) heldObject = NULL; else objectPlace(); // Release grasp of object if we're holding one		
 			break;
 		case SDLK_ESCAPE:
 			if(heldObject && objtype != OBJ_MAX) objectPlace();
@@ -211,7 +213,7 @@ void Naomi::objectPlace(){
 				y = posRect.y + 16;
 				break;
 			case 90:
-				x = posRect.x - heldObject->posRect.w/2 + 16;
+				x = posRect.x - w/2 + 16;
 				y = posRect.y - h + 16;
 				break;
 			case 180:
@@ -219,7 +221,7 @@ void Naomi::objectPlace(){
 				y = posRect.y + 16;
 				break;
 			case 270:
-				x = posRect.x - heldObject->posRect.w/2 + 16;
+				x = posRect.x - w/2 + 16;
 				y = posRect.y + 48;
 				break;
 		}

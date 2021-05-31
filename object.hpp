@@ -32,7 +32,7 @@ void cleanObjectTextures();
 class Object{
 	public:
 		// Object Constructor/Destructor
-		Object(SDL_Window* win, AVAIL_OBJECTS type=TABLE, uint16_t x=0, u_int16_t y=0, uint16_t id=0xffff);
+		Object(AVAIL_OBJECTS type=TABLE, uint16_t x=0, u_int16_t y=0, uint16_t id=0xffff);
 		~Object();
 
 		// Object Methods
@@ -56,8 +56,6 @@ class Object{
 		// Object Variables
 		uint8_t image_side, image_index, image_speed, numImg, numSubImg;
 		uint16_t depth, id, direction;
-		SDL_Window *gwin;
-		SDL_Renderer *grenderer;
 		SDL_Rect posRect, clip, bBox;
 		SDL_Texture *sprTextures;
 		AVAIL_OBJECTS type;

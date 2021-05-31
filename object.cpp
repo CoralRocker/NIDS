@@ -158,12 +158,10 @@ void cleanObjectTextures(){
  * uint16_t depth: the depth at which the object is drawn
  * uint16_t id: A unique identifier for the object.
  */
-Object::Object(SDL_Window* win, AVAIL_OBJECTS type, uint16_t x, u_int16_t y, uint16_t id){
+Object::Object(AVAIL_OBJECTS type, uint16_t x, u_int16_t y, uint16_t id){
 	this->id = id;
 	this->type = type;
 	sprTextures = objectTextures[type];
-	gwin = win;
-	grenderer = SDL_GetRenderer(win);
 	
 	this->depth = y;
 
@@ -326,10 +324,10 @@ Object* Object::draw(){
 	if(!visible) return this;
 
 	// getFrameClip(image_side, image_index);
-	SDL_RenderCopy(grenderer, sprTextures, &clip, &posRect); 
+	SDL_RenderCopy(winRenderer, sprTextures, &clip, &posRect); 
 	if(DEBUG){
 		SDL_Rect cbox = colBox();
-		SDL_RenderDrawRect(grenderer, &cbox);
+		SDL_RenderDrawRect(winRenderer, &cbox);
 	}
 
 	return this;

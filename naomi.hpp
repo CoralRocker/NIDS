@@ -10,7 +10,7 @@
 
 class Naomi : public Object {
 	public:
-		Naomi(SDL_Window* win, uint16_t x=0, u_int16_t y=0, uint16_t id=0xffff);
+		Naomi(uint16_t x=0, u_int16_t y=0, uint16_t id=0xffff);
 		
 		void step();
 		void move(SDL_Keycode sym);

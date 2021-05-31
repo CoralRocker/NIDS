@@ -68,7 +68,7 @@ int main(int argc, char** argv){
 	Menu* menu = new Menu();
 
 	// Naomi object
-	Naomi* naomi = new Naomi(win, 96, 96, 0xffff);
+	Naomi* naomi = new Naomi(96, 96, 0xffff);
 	naomi->step_dist = 8;
 	naomi->walk_speed = 4;
 	naomi->quit = &quit;
@@ -80,20 +80,20 @@ int main(int argc, char** argv){
 	// Walls
 	Object* tmpObj;
 
-	objects.push_back(new Object(win, WALL, 0, 0, objects.size()));
+	objects.push_back(new Object(WALL, 0, 0, objects.size()));
 	((Object*)objects.back())->stretch(SCREEN_WIDTH/32.f, 1);
 	
-	objects.push_back(new Object(win, SIDE_WALL, 0, 0, objects.size()));
+	objects.push_back(new Object(SIDE_WALL, 0, 0, objects.size()));
 	((Object*)objects.back())->stretch(1, SCREEN_HEIGHT/64.f);
 	
-	objects.push_back(new Object(win, SIDE_WALL, SCREEN_WIDTH-32, 0, objects.size()));
+	objects.push_back(new Object(SIDE_WALL, SCREEN_WIDTH-32, 0, objects.size()));
 	((Object*)objects.back())->stretch(1, SCREEN_HEIGHT/64.f);
 	
-	objects.push_back(new Object(win, WALL, 32, SCREEN_HEIGHT/2, objects.size()));
+	objects.push_back(new Object(WALL, 32, SCREEN_HEIGHT/2, objects.size()));
 	((Object*)objects.back())->stretch(SCREEN_WIDTH/96.f, 1);
 
 	// MISC Objects
-	objects.push_back(new Object(win, MAGGIE, 180, 180, objects.size()));
+	objects.push_back(new Object(MAGGIE, 180, 180, objects.size()));
 	((Object*)objects.back())->getFrameClip(3, 0)->image_speed = 4;
 
 	// FPS Stabilization

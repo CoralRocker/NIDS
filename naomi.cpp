@@ -15,7 +15,7 @@
  * Naomi objects (duh). It initializes the default walking
  * speed and step distance.
  */
-Naomi::Naomi(SDL_Window* win, uint16_t x, u_int16_t y, uint16_t id) : Object(win, NAOMI, x, y, id){
+Naomi::Naomi(uint16_t x, u_int16_t y, uint16_t id) : Object(NAOMI, x, y, id){
 	moving = false;
 	walk_speed = 4;
 	step_dist = 16;
@@ -61,6 +61,7 @@ void Naomi::step(){
 /** This function takes in a keycode from the main game 
  * loop and decides which direction to move Naomi, if any.
  *
+ * UPDATE: This function is only called from the Naomi::input() function.
  */
 void Naomi::move(SDL_Keycode sym){
 	// Check if naomi is already moving. Exit if yes.
@@ -168,7 +169,8 @@ void Naomi::findNearest(){
 }
 
 /** Handle input from the keyboard and decide what to do with it.
- *
+ * This is the only Naomi method that should be used for resolving
+ * keyboard inputs.
  */
 void Naomi::input(SDL_Keycode sym){
 	if(game_pause) return;
@@ -182,12 +184,11 @@ void Naomi::input(SDL_Keycode sym){
 			move(sym);
 			break;
 		case SDLK_q:
-			*quit = true;
+			// The only quit method should be the menu quit.
+			// *quit = true;
 			break;
 		case SDLK_SPACE:
 			if(objtype == OBJ_MAX) break;
-			puts("Space");
-			printf("HeldObject: %p\n", heldObject);
 			if(heldObject) heldObject = NULL; else objectPlace(); // Release grasp of object if we're holding one		
 			break;
 		case SDLK_ESCAPE:
@@ -201,7 +202,8 @@ void Naomi::input(SDL_Keycode sym){
 	}
 }
 
-/** Handles the placement and controlling of of Objects
+/** Places an object if there is no currently held object. If there is,
+ * this method frees and destroys the object.
  */
 void Naomi::objectPlace(){
 	if(heldObject == NULL){
@@ -225,7 +227,7 @@ void Naomi::objectPlace(){
 				y = posRect.y + 48;
 				break;
 		}
-		Object* tObj = new Object(win, objtype, x, y, objects.size());
+		Object* tObj = new Object(objtype, x, y, objects.size());
 		heldObject = tObj;
 		objects.push_back(tObj);
 	}else{

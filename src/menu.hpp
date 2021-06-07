@@ -22,6 +22,8 @@ enum MENU_OPTIONS{
 	MENU_MAX
 };
 
+extern const char *opt_names[MENU_MAX];
+
 class Menu {
 	public:
 		Menu();

@@ -13,10 +13,10 @@
 #include "object.hpp"
 #include "naomi.hpp"
 
-#define FPS 60
-#define tpf 1000/FPS
-
 int main(int argc, char** argv){
+
+	// If DEBUG build...
+	DEBUG = true;
 
 	// Start SDL
 	if(init() != true){
@@ -166,8 +166,8 @@ int main(int argc, char** argv){
 			end64 = SDL_GetPerformanceCounter();
 			elapsed64 = (double)((end64-start64)*1000)/cps;
 		}
-		if(elapsed < tpf){	
-			SDL_Delay(tpf - elapsed);
+		if(elapsed < TPF){	
+			SDL_Delay(TPF - elapsed);
 		}
 	}
 

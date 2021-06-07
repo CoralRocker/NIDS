@@ -21,6 +21,9 @@ TTF_Font *fontLrg = NULL, *fontMed = NULL, *fontSml = NULL;
 
 bool game_pause = false, DEBUG=false;
 
+uint8_t FPS = 60;
+double TPF = 1000.f/FPS;
+
 std::vector<void*> objects;
 
 const SDL_Color colors[COLOR_MAX] = {

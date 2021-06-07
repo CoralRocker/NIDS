@@ -20,6 +20,8 @@
 const short SCREEN_WIDTH = 640;//1152;
 const short SCREEN_HEIGHT = 480;//852;
 extern bool DEBUG; // Used to be const, but better to be on/off-able.
+extern uint8_t FPS;
+extern double TPF;
 
 enum ColorCodes{
 	BLACK,

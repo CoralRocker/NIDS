@@ -26,6 +26,11 @@ const char *obj_names[OBJ_MAX] = {
 	"Maggie"
 };
 
+const char *opt_names[MENU_MAX] = {
+	"DEBUG MODE: ",
+	"FPS: "
+};
+
 Menu::Menu(){
 	pause = &game_pause;
 	visible = false;
@@ -90,6 +95,20 @@ void Menu::input(SDL_Keycode sym){
 							sel[0] = 0;
 							*pause = 1-(*pause);
 							break;
+						case 1:
+							switch(sel[1]){
+								case TOGGLE_DEBUG:
+									DEBUG = 1-DEBUG;
+									break;
+								case TOGGLE_FPS:
+									if(FPS == 60)
+										FPS = 30;
+									else
+										FPS = 60;
+									TPF = 1000.f/FPS;
+									break;
+							}
+							break;
 						case 2:
 							*naomi->quit = true;
 							break;
@@ -102,10 +121,26 @@ void Menu::input(SDL_Keycode sym){
 				sel.pop_back();
 			break;
 		case SDLK_UP:
-			if(sel.size() == 2) if(++sel[1] == OBJ_MAX) sel[1] = 0;
+			if(!(sel.size() == 2)) break;
+			switch(sel[0]){
+				case 0:
+					if(++sel[1] == OBJ_MAX) sel[1] = 0;
+					break;
+				case 1:
+					if(++sel[1] == MENU_MAX) sel[1] = MENU_MAX-1;
+					break;
+			}
 			break;
 		case SDLK_DOWN:
-			if(sel.size() == 2) if(sel[1]-- == 0) sel[1] = OBJ_MAX-1;
+			if(!(sel.size() == 2)) break; 
+			switch(sel[0]){
+				case 0:
+					if(sel[1]-- == 0) sel[1] = OBJ_MAX-1;
+					break;
+				case 1:
+					if(sel[1]-- == 0) sel[1] = 0;
+					break;
+			}
 			break;
 	}
 }
@@ -167,8 +202,22 @@ void Menu::draw(){
 				tBox.x = SCREEN_WIDTH/2 - tBox.w/2;
 				tBox.y = SCREEN_HEIGHT - 96 - tBox.h;
 				SDL_RenderCopy(winRenderer, textBox, NULL, &tBox);
-				
-				renderText({SCREEN_WIDTH/2, SCREEN_HEIGHT - 96 - tBox.h/2, 0,0}, "NULL", BLACK, fontLrg, TXT_MIDDLE);
+				for(int i = 0; i < MENU_MAX; i++){
+					fnt = (i == sel[1]) ? fontMed : fontSml;
+
+					char* tmpstr = new char[64];
+					switch(i){
+						case TOGGLE_DEBUG:
+							sprintf(tmpstr, "%s%s", opt_names[i], DEBUG ? "On" : "Off");
+							break;
+						case TOGGLE_FPS:
+							sprintf(tmpstr, "%s%d", opt_names[i], FPS);
+							break;
+					}
+					renderText({SCREEN_WIDTH/2, SCREEN_HEIGHT - 96 - (tBox.h/3 * (i+1)), 0,0}, tmpstr, BLACK, fnt, TXT_MIDDLE);
+					delete[] tmpstr;
+				}
+				// renderText({SCREEN_WIDTH/2, SCREEN_HEIGHT - 96 - tBox.h/2, 0,0}, "NULL", BLACK, fontLrg, TXT_MIDDLE);
 				break;
 			case 2:
 				tBox = stretch(0.75, 0.5);

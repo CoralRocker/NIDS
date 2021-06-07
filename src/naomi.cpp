@@ -184,12 +184,16 @@ void Naomi::input(SDL_Keycode sym){
 			move(sym);
 			break;
 		case SDLK_q:
+			if(DEBUG) *quit = true;
 			// The only quit method should be the menu quit.
 			// *quit = true;
 			break;
 		case SDLK_SPACE:
 			if(objtype == OBJ_MAX) break;
-			if(heldObject) heldObject = NULL; else objectPlace(); // Release grasp of object if we're holding one		
+			if(heldObject){
+				heldObject->solid = true;
+				heldObject = NULL; 
+			}else objectPlace(); // Release grasp of object if we're holding one		
 			break;
 		case SDLK_ESCAPE:
 			if(heldObject && objtype != OBJ_MAX) objectPlace();
@@ -229,6 +233,7 @@ void Naomi::objectPlace(){
 		}
 		Object* tObj = new Object(objtype, x, y, objects.size());
 		heldObject = tObj;
+		heldObject->solid=false;
 		objects.push_back(tObj);
 	}else{
 		objects.erase(std::find(objects.begin(), objects.end(), heldObject));
@@ -243,6 +248,8 @@ void Naomi::objectPlace(){
  */
 bool Naomi::placeFree(SDL_Point place){
 	for(std::vector<void*>::iterator it = objects.begin(); it != objects.end(); it++){
+		if(!((Object*)*it)->solid) continue;
+
 		SDL_Rect tBox = ((Object*)*it)->colBox();
 		SDL_bool res = SDL_PointInRect(&place, &tBox);
 		if(res == SDL_TRUE)

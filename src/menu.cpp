@@ -28,7 +28,8 @@ const char *obj_names[OBJ_MAX] = {
 
 const char *opt_names[MENU_MAX] = {
 	"DEBUG MODE: ",
-	"FPS: "
+	"FPS: ",
+	"SHOW FPS: "
 };
 
 Menu::Menu(){
@@ -107,6 +108,9 @@ void Menu::input(SDL_Keycode sym){
 										FPS = 60;
 									TPF = 1000.f/FPS;
 									break;
+								case TOGGLE_SHOW_FPS:
+									SHOW_FPS = 1-SHOW_FPS;
+									break;
 							}
 							break;
 						case 2:
@@ -146,11 +150,11 @@ void Menu::input(SDL_Keycode sym){
 }
 
 void Menu::draw(){
-	char* str = new char[32];
-	sprintf(str, "Paused: %s", *pause ? "True" : "False");
+	//char* str = new char[32];
+	// sprintf(str, "Paused: %s", *pause ? "True" : "False");
 	// if(DEBUG) puts(str);
-	renderText({0, 0, 0,0}, str, LBLUE, fontSml);
-	delete[] str;
+	// renderText({0, 0, 0,0}, str, LBLUE, fontSml);
+	// delete[] str;
 
 
 	if(!game_pause) return;
@@ -212,6 +216,9 @@ void Menu::draw(){
 							break;
 						case TOGGLE_FPS:
 							sprintf(tmpstr, "%s%d", opt_names[i], FPS);
+							break;
+						case TOGGLE_SHOW_FPS:
+							sprintf(tmpstr, "%s%s", opt_names[i], SHOW_FPS ? "On" : "Off");
 							break;
 					}
 					renderText({SCREEN_WIDTH/2, SCREEN_HEIGHT - 96 - (tBox.h/3 * (i+1)), 0,0}, tmpstr, BLACK, fnt, TXT_MIDDLE);

@@ -151,13 +151,23 @@ int main(int argc, char** argv){
 		// Draw Menu
 		menu->draw();
 
-		SDL_RenderPresent(winRenderer);
 		
 
 		// FPS Correction, If Needed.
 		end = SDL_GetTicks();
 		elapsed = end-start;
 		
+		if(SHOW_FPS){
+			char* txt = new char[16];
+			if(elapsed)
+				sprintf(txt, "FPS: %d", 1000/elapsed);
+			else
+				sprintf(txt, "FPS: 1000+");
+			renderText({0,0,0,0}, txt, BLACK, fontSml, TXT_LEFT);
+			delete[] txt;
+		}
+		
+		SDL_RenderPresent(winRenderer);
 
 		if(DEBUG){
 			end64 = SDL_GetPerformanceCounter();

@@ -19,7 +19,7 @@ SDL_Window* win = NULL;
 SDL_Renderer* winRenderer = NULL;
 TTF_Font *fontLrg = NULL, *fontMed = NULL, *fontSml = NULL;
 
-bool game_pause = false, DEBUG=false;
+bool game_pause = false, DEBUG=false, SHOW_FPS=false;
 
 uint8_t FPS = 60;
 double TPF = 1000.f/FPS;

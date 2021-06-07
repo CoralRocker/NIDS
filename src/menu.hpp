@@ -18,7 +18,7 @@ extern const char *obj_names[OBJ_MAX];
 enum MENU_OPTIONS{
 	TOGGLE_DEBUG,
 	TOGGLE_FPS,
-
+	TOGGLE_SHOW_FPS,
 	MENU_MAX
 };
 

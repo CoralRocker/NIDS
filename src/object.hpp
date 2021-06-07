@@ -23,6 +23,7 @@ enum AVAIL_OBJECTS {
 
 extern uint8_t OBJ_DATA[OBJ_MAX][4]; 
 extern SDL_Rect BBOX_DATA[OBJ_MAX];
+extern int8_t OBJ_DEPTH_CORRECT[OBJ_MAX];
 
 static SDL_Texture* objectTextures[OBJ_MAX];
 void loadObjectTextures();
@@ -47,6 +48,7 @@ class Object{
 		Object* stretch(float factor);
 		Object* resetSize();
 		void getCxy(uint16_t (&arr)[2]);
+		int8_t depthCorrect();
 
 
 		// Operators

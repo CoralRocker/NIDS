@@ -28,16 +28,33 @@ uint8_t OBJ_DATA[OBJ_MAX][4] = {
  */
 SDL_Rect BBOX_DATA[OBJ_MAX] = {
 	{0, 32, 32, 16}, // {x, y, w, h}
-	{0, 15, 64, 16}, {0, 15, 31, 15}, {0, 0, 31, 31},
-	{0, 15, 31, 31}, {0, 31, 31, 31},
-	{0, 0, 63, 31}, {0, 2, 31, 45}, {0, 15, 31, 31},
-	{0, 0, 31, 31}, {12, 16, 39, 63},
+	{0, 15, 64, 16}, {0, 15, 32, 16}, {0, 0, 32, 32},
+	{0, 15, 32, 32}, {0, 31, 32, 32},
+	{0, 0, 64, 32}, {0, 2, 32, 45}, {0, 15, 32, 32},
+	{0, 0, 32, 32}, {12, 48, 40, 32},
 	{0, 31, 31, 15}, {0, 0, 31, 31}, {0, 15, 31, 31}, {0, 31, 31, 31}, {0, 32, 63, 31},
 	{0, 15, 31, 48}, {2, 0, 27, 29}, {0, 0, 63, 63}, {0, 47, 63, 32}, {0, 15, 63, 32},
 	{7, 31, 65, 48}, {2, 6, 57, 39},
 	{0, 31, 32, 32}, {0, 0, 31, 63},
 
 	{6, 12, 32, 18}
+};
+
+/** Depth Used to be hardcoded based on bounding boxes,
+ * but using a correction can help the game feel more real.
+ */
+int8_t OBJ_DEPTH_CORRECT[OBJ_MAX] = {
+	0,
+	0, 0, 0,
+	0, 0,
+	0, 0, 0,
+	0, 16, 
+	0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 
+	0, 0, 
+	0, 0, 
+
+	0
 };
 
 /** Function to load textures for all the objects into memory at once.
@@ -163,7 +180,7 @@ Object::Object(AVAIL_OBJECTS type, uint16_t x, u_int16_t y, uint16_t id){
 	this->type = type;
 	sprTextures = objectTextures[type];
 	
-	this->depth = y;
+	this->depth = y + OBJ_DEPTH_CORRECT[type];
 
 	posRect.x = x;
 	posRect.y = y;
@@ -343,6 +360,14 @@ void Object::getCxy(uint16_t (&arr)[2]){
 	cy = posRect.y + posRect.h/2;
 	arr[0] = cx;
 	arr[1] = cy;
+}
+
+/** Method to get the depth correction for the current obj.
+ * Will be useful when placing down objects and modifying their
+ * depths for decorative purposes.
+ */
+int8_t Object::depthCorrect(){
+	return OBJ_DEPTH_CORRECT[type];
 }
 
 /** Compare Objects by their depth

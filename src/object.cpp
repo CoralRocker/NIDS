@@ -345,6 +345,9 @@ Object* Object::draw(){
 	if(DEBUG){
 		SDL_Rect cbox = colBox();
 		SDL_RenderDrawRect(winRenderer, &cbox);
+		SDL_Rect sBox = {posRect.x, posRect.y, clip.w, clip.h};
+		SDL_RenderDrawRect(winRenderer, &sBox);
+		SDL_RenderDrawLine(winRenderer, posRect.x, depth, posRect.x+clip.w, depth);
 	}
 
 	return this;

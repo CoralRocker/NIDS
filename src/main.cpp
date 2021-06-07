@@ -75,8 +75,6 @@ int main(int argc, char** argv){
 	
 	menu->naomi = naomi;
 
-	if(DEBUG) printf("org naomiptr: %p\n", naomi);
-
 	// Walls
 	Object* tmpObj;
 
@@ -114,7 +112,6 @@ int main(int argc, char** argv){
 					naomi->input(e.key.keysym.sym);
 					switch(e.key.keysym.sym){
 						case SDLK_TAB:
-							printf("cur naomiptr: %p\n", naomi);
 							printf("Frame_no: %u\n", frame);
 							printf("Time of last frame (ms): %u\n", elapsed);
 							if(DEBUG) printf("High-Perf time of last frame (ms): %f\n\n", elapsed64); else puts("");

@@ -44,7 +44,7 @@ void Naomi::step(){
 		if(heldObject){
 			heldObject->posRect.x += dcos(direction);
 			heldObject->posRect.y -= dsin(direction);
-			heldObject->depth = heldObject->posRect.y;
+			heldObject->depth -= dsin(direction);//heldObject->posRect.y;
 		}
 	
 	}else{
@@ -104,6 +104,7 @@ void Naomi::move(SDL_Keycode sym){
 				heldObject->posRect.y = posRect.y + 48;
 				break;
 		}
+		heldObject->depth = heldObject->posRect.y + heldObject->depthCorrect();
 	}
 
 	uint8_t side = direction/90; // 2/pi * theta(radians) gives the proper image index. Simplified to degrees/90.
@@ -144,9 +145,6 @@ void Naomi::findNearest(){
 			sy = posRect.y - posRect.h;
 			break;
 	}
-
-	// std::sort(objects.begin(), objects.end(), [](void* obj1, void* obj2){ return ((Object*)obj1)->depth < ((Object*)obj2)->depth;});
-
 	
 	Object* closest;
 	float dist = SCREEN_WIDTH+SCREEN_HEIGHT; 

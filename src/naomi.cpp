@@ -115,8 +115,8 @@ void Naomi::move(SDL_Keycode sym){
 	SDL_Rect tBox = colBox();
 	tBox.y -= dsin(direction)*step_dist;
 	tBox.x += dcos(direction)*step_dist;
-	SDL_Point p = {tBox.x, tBox.y};
-	if(!placeFree(p))
+
+	if(!placeFree(tBox))
 		return;
 
 	moving = true;
@@ -246,12 +246,12 @@ void Naomi::objectPlace(){
  * objects. This is used when deciding whether or not to move 
  * the Naomi object.
  */
-bool Naomi::placeFree(SDL_Point place){
+bool Naomi::placeFree(SDL_Rect place){
 	for(std::vector<void*>::iterator it = objects.begin(); it != objects.end(); it++){
 		if(!((Object*)*it)->solid) continue;
 
 		SDL_Rect tBox = ((Object*)*it)->colBox();
-		SDL_bool res = SDL_PointInRect(&place, &tBox);
+		SDL_bool res = SDL_HasIntersection(&place, &tBox);
 		if(res == SDL_TRUE)
 			return false;
 	}

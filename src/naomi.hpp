@@ -14,7 +14,7 @@ class Naomi : public Object {
 		
 		void step();
 		void move(SDL_Keycode sym);
-		bool placeFree(SDL_Point place);
+		bool placeFree(SDL_Rect place);
 		void input(SDL_Keycode sym);
 		void objectPlace();
 		void findNearest();

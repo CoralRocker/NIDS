@@ -90,6 +90,11 @@ int main(int argc, char** argv){
 	objects.push_back(new Object(WALL, 32, SCREEN_HEIGHT/2, objects.size()));
 	((Object*)objects.back())->stretch(SCREEN_WIDTH/96.f, 1);
 
+	objects.push_back(new Object(SIDE_WALL, SCREEN_WIDTH/3 * 2, 12, objects.size()));
+	((Object*)objects.back())->stretch(1, SCREEN_HEIGHT/(48.f* 4));
+	
+	objects.push_back(new Object(WALL, SCREEN_WIDTH/3 * 2, SCREEN_HEIGHT/3-52, objects.size()));
+
 	// MISC Objects
 	objects.push_back(new Object(MAGGIE, 180, 180, objects.size()));
 	((Object*)objects.back())->getFrameClip(3, 0)->image_speed = 4;

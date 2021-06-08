@@ -22,6 +22,7 @@ Naomi::Naomi(uint16_t x, u_int16_t y, uint16_t id) : Object(NAOMI, x, y, id){
 	keyboard = SDL_GetKeyboardState(NULL);
 	objtype = OBJ_MAX;
 	heldObject = NULL;
+	ghost = false;
 }
 
 /** The step function runs every frame of the game. 
@@ -117,7 +118,7 @@ void Naomi::move(SDL_Keycode sym){
 	tBox.y -= dsin(direction)*step_dist;
 	tBox.x += dcos(direction)*step_dist;
 
-	if(!placeFree(tBox))
+	if(!ghost && !placeFree(tBox))
 		return;
 
 	moving = true;
@@ -163,6 +164,7 @@ void Naomi::findNearest(){
 	}
 
 	heldObject = closest;
+	heldObject->solid = false;
 	if(objtype == OBJ_MAX) objtype = closest->type;
 }
 
@@ -196,6 +198,15 @@ void Naomi::input(SDL_Keycode sym){
 			if(objtype == OBJ_MAX) break;
 			if(heldObject){
 				heldObject->solid = true;
+				switch(heldObject->type){
+					case SMALL_PLANTS:
+					case STOOL:
+						heldObject->solid = false;
+						break;
+					default:
+						heldObject->solid = true;
+						break;
+				}
 				heldObject = NULL; 
 			}else objectPlace(); // Release grasp of object if we're holding one		
 			break;
@@ -204,6 +215,9 @@ void Naomi::input(SDL_Keycode sym){
 			break;
 		case SDLK_f:
 			findNearest();				
+			break;
+		case SDLK_g:
+			ghost = 1-ghost;
 			break;
 		default:
 			break;

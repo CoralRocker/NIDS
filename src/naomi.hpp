@@ -23,7 +23,7 @@ class Naomi : public Object {
 		
 		bool* quit;
 		uint8_t walk_speed, step_dist;
-		bool moving;
+		bool moving, ghost;
 		
 		AVAIL_OBJECTS objtype;
 		Object* heldObject;

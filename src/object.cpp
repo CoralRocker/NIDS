@@ -28,7 +28,7 @@ uint8_t OBJ_DATA[OBJ_MAX][4] = {
  */
 SDL_Rect BBOX_DATA[OBJ_MAX] = {
 	{0, 32, 32, 16}, // {x, y, w, h}
-	{0, 16, 64, 16}, {0, 16, 32, 16}, {0, 0, 32, 32},
+	{0, 16, 64, 24}, {0, 16, 32, 24}, {0, 0, 32, 32},
 	{0, 16, 32, 32}, {0, 32, 32, 32},
 	{0, 0, 64, 32}, {0, 2, 32, 45}, {0, 16, 32, 32},
 	{0, 0, 32, 32}, {12, 48, 40, 32},
@@ -37,7 +37,7 @@ SDL_Rect BBOX_DATA[OBJ_MAX] = {
 	{7, 31, 65, 48}, {2, 6, 57, 39},
 	{0, 32, 32, 31}, {0, 0, 32, 64},
 
-	{6, 12, 32, 18}
+	{0, 0, 48, 32}
 };
 
 /** Depth Used to be hardcoded based on bounding boxes,
@@ -45,7 +45,7 @@ SDL_Rect BBOX_DATA[OBJ_MAX] = {
  */
 int8_t OBJ_DEPTH_CORRECT[OBJ_MAX] = {
 	0,
-	0, 0, 0,
+	0, 0, -32,
 	0, 0,
 	0, 0, 0,
 	0, 16, 
@@ -192,7 +192,15 @@ Object::Object(AVAIL_OBJECTS type, uint16_t x, u_int16_t y, uint16_t id){
 	image_index = 0;
 	image_side = 0;
 	direction = 0;
-	solid = true;
+	switch(type){
+		case SMALL_PLANTS:
+		case STOOL:
+			solid = false;
+			break;
+		default:
+			solid = true;
+			break;
+	}
 	bBox = BBOX_DATA[type];
 	visible = true;
 

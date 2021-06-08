@@ -30,7 +30,8 @@ const char *opt_names[MENU_MAX] = {
 	"DEBUG MODE: ",
 	"FPS: ",
 	"SHOW FPS: ",
-	"GRID: "
+	"GRID: ",
+	"Toggle Fullscreen"
 };
 
 Menu::Menu(){
@@ -116,6 +117,13 @@ void Menu::input(SDL_Keycode sym){
 									break;
 								case TOGGLE_GRID:
 									DRAW_GRID = 1-DRAW_GRID;
+									break;
+								case TOGGLE_FULLSCREEN:
+									FULLSCREEN = 1-FULLSCREEN;
+									if(FULLSCREEN)
+										SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN);
+									else
+										SDL_SetWindowFullscreen(win, 0);
 									break;
 							}
 							break;
@@ -210,7 +218,7 @@ void Menu::draw(){
 				break;
 				}
 			case 1:
-				tBox = stretch(1, 2);
+				tBox = stretch(1, (MENU_MAX*0.5));
 				tBox.x = SCREEN_WIDTH/2 - tBox.w/2;
 				tBox.y = SCREEN_HEIGHT - 96 - tBox.h;
 				SDL_RenderCopy(winRenderer, textBox, NULL, &tBox);
@@ -231,8 +239,11 @@ void Menu::draw(){
 						case TOGGLE_GRID:
 							sprintf(tmpstr, "%s%s", opt_names[i], DRAW_GRID ? "On" : "Off");
 							break;
+						case TOGGLE_FULLSCREEN:
+							sprintf(tmpstr, "%s", opt_names[i]);
+							break;
 					}
-					renderText({SCREEN_WIDTH/2, SCREEN_HEIGHT - 96 - (tBox.h/5 * (i+1)), 0,0}, tmpstr, BLACK, fnt, TXT_MIDDLE);
+					renderText({SCREEN_WIDTH/2, SCREEN_HEIGHT - 96 - (tBox.h/(MENU_MAX+1) * (i+1)), 0,0}, tmpstr, BLACK, fnt, TXT_MIDDLE);
 					delete[] tmpstr;
 				}
 				break;

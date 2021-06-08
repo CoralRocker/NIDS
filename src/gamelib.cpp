@@ -19,7 +19,7 @@ SDL_Window* win = NULL;
 SDL_Renderer* winRenderer = NULL;
 TTF_Font *fontLrg = NULL, *fontMed = NULL, *fontSml = NULL;
 
-bool game_pause = false, DEBUG=false, SHOW_FPS=false;
+bool game_pause = false, DEBUG=false, SHOW_FPS=false, DRAW_GRID=false;
 
 uint8_t FPS = 60;
 double TPF = 1000.f/FPS;
@@ -75,6 +75,16 @@ void renderText(SDL_Rect position, const char* str, ColorCodes clrcd, TTF_Font* 
 	SDL_DestroyTexture(sTexture);
 }
 
+void drawGrid(int gridsize){
+	int numCols = SCREEN_WIDTH/gridsize, numRows = SCREEN_HEIGHT/gridsize;
+	for(int i = 1; i <= numCols; i++){
+		SDL_RenderDrawLine(winRenderer, i*gridsize, 0, i*gridsize, SCREEN_HEIGHT);
+	}
+	for(int i = 1; i <= numRows; i++){
+		SDL_RenderDrawLine(winRenderer, 0, i*gridsize, SCREEN_WIDTH, i*gridsize);
+	}
+}
+
 void drawCircle(uint16_t x0, uint16_t y0, uint16_t r, bool filled){
 	double PI = 3.14159265;
 	double PIH = PI/2.f;
@@ -125,7 +135,11 @@ float dcos(float direction){
 	result = cos(direction*PI/180);
 	return result;
 }
-	
+
+int roundTo8(int num){
+	return 8*nearbyint(num/8);
+}
+
 void close(){
 	SDL_DestroyRenderer(winRenderer);
 	SDL_DestroyWindow(win);
@@ -149,7 +163,7 @@ bool init(){
 		success = false;
 	}else{
 		// Create Window
-		win = SDL_CreateWindow("Naomi Interior Design Simulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		win = SDL_CreateWindow("Naomi Interior Design Simulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);//SDL_WINDOW_FULLSCREEN);
 		
 		if(win == NULL){
 			printf("Error creating window. ERR: %s\n", SDL_GetError());

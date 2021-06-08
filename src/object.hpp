@@ -47,9 +47,12 @@ class Object{
 		Object* stretch(float xFactor, float yFactor);
 		Object* stretch(float factor);
 		Object* resetSize();
+		Object* stretchFitX(int w);
+		Object* stretchFitY(int h);
 		void getCxy(uint16_t (&arr)[2]);
 		int8_t depthCorrect();
-
+		void decImg();
+		void incImg();
 
 		// Operators
 		bool operator<(Object& other);

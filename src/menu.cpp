@@ -29,7 +29,8 @@ const char *obj_names[OBJ_MAX] = {
 const char *opt_names[MENU_MAX] = {
 	"DEBUG MODE: ",
 	"FPS: ",
-	"SHOW FPS: "
+	"SHOW FPS: ",
+	"GRID: "
 };
 
 Menu::Menu(){
@@ -65,7 +66,9 @@ void Menu::input(SDL_Keycode sym){
 	switch(sym){
 		case SDLK_p:
 			*pause = 1-(*pause);
+			while(sel.size() > 1){sel.pop_back();}
 			sel[0] = 0;
+
 			break;
 		case SDLK_d:
 			if(!game_pause) break;
@@ -80,7 +83,7 @@ void Menu::input(SDL_Keycode sym){
 		case SDLK_LEFT:
 			if(sel.size() == 1){ 
 				sel[0]--;
-				if(sel[0] < 0) sel[0] = 2;
+				if(sel[0] > 3) sel[0] = 2;
 			}
 			break;
 		case SDLK_RETURN:
@@ -111,6 +114,9 @@ void Menu::input(SDL_Keycode sym){
 								case TOGGLE_SHOW_FPS:
 									SHOW_FPS = 1-SHOW_FPS;
 									break;
+								case TOGGLE_GRID:
+									DRAW_GRID = 1-DRAW_GRID;
+									break;
 							}
 							break;
 						case 2:
@@ -121,8 +127,10 @@ void Menu::input(SDL_Keycode sym){
 			}
 			break;
 		case SDLK_ESCAPE:
-			if(sel.size() > 1)
+			while(sel.size() > 1){
 				sel.pop_back();
+			}
+			sel[0] = 0;
 			break;
 		case SDLK_UP:
 			if(!(sel.size() == 2)) break;
@@ -202,7 +210,7 @@ void Menu::draw(){
 				break;
 				}
 			case 1:
-				tBox = stretch(0.75, 1);
+				tBox = stretch(1, 2);
 				tBox.x = SCREEN_WIDTH/2 - tBox.w/2;
 				tBox.y = SCREEN_HEIGHT - 96 - tBox.h;
 				SDL_RenderCopy(winRenderer, textBox, NULL, &tBox);
@@ -220,11 +228,13 @@ void Menu::draw(){
 						case TOGGLE_SHOW_FPS:
 							sprintf(tmpstr, "%s%s", opt_names[i], SHOW_FPS ? "On" : "Off");
 							break;
+						case TOGGLE_GRID:
+							sprintf(tmpstr, "%s%s", opt_names[i], DRAW_GRID ? "On" : "Off");
+							break;
 					}
-					renderText({SCREEN_WIDTH/2, SCREEN_HEIGHT - 96 - (tBox.h/3 * (i+1)), 0,0}, tmpstr, BLACK, fnt, TXT_MIDDLE);
+					renderText({SCREEN_WIDTH/2, SCREEN_HEIGHT - 96 - (tBox.h/5 * (i+1)), 0,0}, tmpstr, BLACK, fnt, TXT_MIDDLE);
 					delete[] tmpstr;
 				}
-				// renderText({SCREEN_WIDTH/2, SCREEN_HEIGHT - 96 - tBox.h/2, 0,0}, "NULL", BLACK, fontLrg, TXT_MIDDLE);
 				break;
 			case 2:
 				tBox = stretch(0.75, 0.5);

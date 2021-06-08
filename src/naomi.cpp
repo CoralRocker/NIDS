@@ -182,9 +182,15 @@ void Naomi::input(SDL_Keycode sym){
 			move(sym);
 			break;
 		case SDLK_q:
-			if(DEBUG) *quit = true;
+			if(DEBUG && keyboard[SDL_SCANCODE_ESCAPE]) *quit = true;
 			// The only quit method should be the menu quit.
 			// *quit = true;
+			
+			if(heldObject) heldObject->decImg();
+			printf("");
+			break;
+		case SDLK_e:
+			if(heldObject) heldObject->incImg();
 			break;
 		case SDLK_SPACE:
 			if(objtype == OBJ_MAX) break;

@@ -19,7 +19,7 @@
 
 const short SCREEN_WIDTH = 640;//1152;
 const short SCREEN_HEIGHT = 480;//852;
-extern bool DEBUG, SHOW_FPS; // Used to be const, but better to be on/off-able.
+extern bool DEBUG, SHOW_FPS, DRAW_GRID; // Used to be const, but better to be on/off-able.
 extern uint8_t FPS;
 extern double TPF;
 
@@ -60,9 +60,11 @@ extern std::vector<void*> objects;
 extern TTF_Font* fontLrg, *fontMed, *fontSml;
 extern bool game_pause;
 
+int roundTo8(int num);
 
 void renderText(SDL_Rect position, const char* str, ColorCodes clrcd, TTF_Font* font, textModes mode=TXT_LEFT);
 void drawCircle(uint16_t x0, uint16_t y0, uint16_t r, bool filled=false);
+void drawGrid(int gridsize);
 
 float dsin(float direction);
 float dcos(float direction);

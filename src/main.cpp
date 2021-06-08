@@ -24,9 +24,14 @@ int main(int argc, char** argv){
 		return INIT_FAIL;
 	}
 	
+	//SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN);
+
 	// Clear Window
 	SDL_RenderClear(winRenderer);
 	
+	//SDL_RenderSetLogicalSize(winRenderer, 1280, 960);
+	//SDL_RenderSetScale(winRenderer, 2, 2);
+
 	// Load Media
 	loadObjectTextures();
 	SDL_Surface* loadedBackground = IMG_Load("images/bkgd.png");
@@ -88,12 +93,12 @@ int main(int argc, char** argv){
 	((Object*)objects.back())->stretch(1, SCREEN_HEIGHT/64.f);
 	
 	objects.push_back(new Object(WALL, 32, SCREEN_HEIGHT/2, objects.size()));
-	((Object*)objects.back())->stretch(SCREEN_WIDTH/96.f, 1);
+	((Object*)objects.back())->stretchFitX(320);//stretch(SCREEN_WIDTH/96.f, 1);
 
-	objects.push_back(new Object(SIDE_WALL, SCREEN_WIDTH/3 * 2, 12, objects.size()));
-	((Object*)objects.back())->stretch(1, SCREEN_HEIGHT/(48.f* 4));
+	objects.push_back(new Object(SIDE_WALL, roundTo8(SCREEN_WIDTH/3 * 2), 0, objects.size()));
+	((Object*)objects.back())->stretchFitY(128);
 	
-	objects.push_back(new Object(WALL, SCREEN_WIDTH/3 * 2, SCREEN_HEIGHT/3-52, objects.size()));
+	objects.push_back(new Object(WALL, roundTo8(SCREEN_WIDTH/3 * 2), 64, objects.size()));
 
 	// MISC Objects
 	objects.push_back(new Object(MAGGIE, 180, 180, objects.size()));
@@ -156,7 +161,8 @@ int main(int argc, char** argv){
 		// Draw Menu
 		menu->draw();
 
-		
+		// Draw Grid
+		if(DRAW_GRID) drawGrid(naomi->step_dist);
 
 		// FPS Correction, If Needed.
 		end = SDL_GetTicks();

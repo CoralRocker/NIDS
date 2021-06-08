@@ -28,14 +28,14 @@ uint8_t OBJ_DATA[OBJ_MAX][4] = {
  */
 SDL_Rect BBOX_DATA[OBJ_MAX] = {
 	{0, 32, 32, 16}, // {x, y, w, h}
-	{0, 15, 64, 16}, {0, 15, 32, 16}, {0, 0, 32, 32},
-	{0, 15, 32, 32}, {0, 31, 32, 32},
-	{0, 0, 64, 32}, {0, 2, 32, 45}, {0, 15, 32, 32},
+	{0, 16, 64, 16}, {0, 16, 32, 16}, {0, 0, 32, 32},
+	{0, 16, 32, 32}, {0, 32, 32, 32},
+	{0, 0, 64, 32}, {0, 2, 32, 45}, {0, 16, 32, 32},
 	{0, 0, 32, 32}, {12, 48, 40, 32},
 	{0, 31, 31, 15}, {0, 0, 31, 31}, {0, 15, 31, 31}, {0, 31, 31, 31}, {0, 32, 63, 31},
 	{0, 15, 31, 48}, {2, 0, 27, 29}, {0, 0, 63, 63}, {0, 47, 63, 32}, {0, 15, 63, 32},
 	{7, 31, 65, 48}, {2, 6, 57, 39},
-	{0, 31, 32, 32}, {0, 0, 32, 64},
+	{0, 32, 32, 31}, {0, 0, 32, 64},
 
 	{6, 12, 32, 18}
 };
@@ -237,6 +237,26 @@ bool Object::collideWith(SDL_Rect other){
 	return true;	
 }
 
+
+
+Object* Object::stretchFitX(int w){
+	float factor = w/posRect.w;
+	posRect.w = w;
+	bBox.w = (uint16_t) nearbyint(bBox.w*factor);
+	bBox.x = (uint16_t) nearbyint(bBox.x*factor);
+	
+	return this;
+}
+
+Object* Object::stretchFitY(int h){
+	float factor = h/posRect.h;
+	posRect.h = h;
+	bBox.h = (uint16_t) nearbyint(bBox.h*factor);
+	bBox.y = (uint16_t) nearbyint(bBox.y*factor);
+
+	return this;
+}
+
 /** Stretch an object's x and y directions by xFactor and yFactor
  * respectively. This changes both the bounding box and the
  * SDL_Rect which defines the drawing of the object.
@@ -371,6 +391,18 @@ void Object::getCxy(uint16_t (&arr)[2]){
  */
 int8_t Object::depthCorrect(){
 	return OBJ_DEPTH_CORRECT[type];
+}
+
+void Object::decImg(){
+	int simg = image_index - 1;
+	if(simg < 0) simg = numSubImg-1;
+	getFrameClip(image_side, simg);
+}
+
+void Object::incImg(){
+	int simg = image_index + 1;
+	if(simg >= numSubImg) simg = 0;
+	getFrameClip(image_side, simg);
 }
 
 /** Compare Objects by their depth

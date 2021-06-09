@@ -230,6 +230,7 @@ int main(int argc, char** argv){
 		delete (Object*)x;
 	}
 	if(DEBUG) puts("Cleaned Objects");
+	SDL_DestroyTexture(background);
 	cleanObjectTextures();
 	close(); // Clean Up Proceses
 

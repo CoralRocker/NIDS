@@ -50,6 +50,7 @@ void loadSave(const char* savefile){
 			objects.push_back(o);
 		}
 	}
+	fclose(sf);
 }
 
 void save(const char* savefile){

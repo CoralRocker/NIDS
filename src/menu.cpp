@@ -7,11 +7,13 @@
 #include <cstdint>
 
 #include <vector>
+#include <algorithm>
 
 #include "gamelib.hpp"
 #include "menu.hpp"
 #include "naomi.hpp"
 #include "object.hpp"
+#include "save.hpp"
 
 const char *obj_names[OBJ_MAX] = {
 	"Naomi",
@@ -129,6 +131,9 @@ void Menu::input(SDL_Keycode sym){
 							break;
 						case 2:
 							*naomi->quit = true;
+							objects.push_back(naomi);
+							save("sav.nidsav");
+							objects.erase(std::find(objects.begin(), objects.end(), naomi));
 							break;
 					}
 					break;

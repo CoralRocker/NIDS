@@ -7,11 +7,13 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
+#include <unistd.h>
 
 #include "gamelib.hpp"
 #include "menu.hpp"
 #include "object.hpp"
 #include "naomi.hpp"
+#include "save.hpp"
 
 int main(int argc, char** argv){
 
@@ -24,8 +26,6 @@ int main(int argc, char** argv){
 		return INIT_FAIL;
 	}
 	
-	//SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN);
-
 	// Clear Window
 	SDL_RenderClear(winRenderer);
 	
@@ -34,6 +34,8 @@ int main(int argc, char** argv){
 
 	// Load Media
 	loadObjectTextures();
+
+	// Load background of game
 	SDL_Surface* loadedBackground = IMG_Load("images/bkgd.png");
 	SDL_Texture* background = NULL;
 	if(loadedBackground == NULL){
@@ -71,55 +73,79 @@ int main(int argc, char** argv){
 
 	// Menu Object
 	Menu* menu = new Menu();
+	Naomi* naomi;
 
-	// Naomi object
-	Naomi* naomi = new Naomi(96, 96, 0xffff);
-	naomi->step_dist = 8;
-	naomi->walk_speed = 4;
-	naomi->quit = &quit;
-	
-	menu->naomi = naomi;
+	if(!(access("sav.nidsav", F_OK) == 0)){
+		// Naomi object
+		naomi = new Naomi(96, 96, 0xffff);
+		naomi->step_dist = 8;
+		naomi->walk_speed = 4;
+		naomi->quit = &quit;
+		
+		menu->naomi = naomi;
 
-	// Walls
-	Object* tmpObj;
+		// Walls
+		Object* tmpObj;
 
-	objects.push_back(new Object(WALL, 0, 0, objects.size()));
-	((Object*)objects.back())->stretch(SCREEN_WIDTH/32.f, 1);
-	
-	objects.push_back(new Object(SIDE_WALL, 0, 0, objects.size()));
-	((Object*)objects.back())->stretch(1, SCREEN_HEIGHT/64.f);
-	
-	objects.push_back(new Object(SIDE_WALL, SCREEN_WIDTH-32, 0, objects.size()));
-	((Object*)objects.back())->stretch(1, SCREEN_HEIGHT/64.f);
-	
-	objects.push_back(new Object(WALL, 32, SCREEN_HEIGHT/2, objects.size()));
-	((Object*)objects.back())->stretchFitX(320);//stretch(SCREEN_WIDTH/96.f, 1);
+		objects.push_back(new Object(WALL, 0, 0, objects.size()));
+		((Object*)objects.back())->stretch(SCREEN_WIDTH/32.f, 1);
+		
+		objects.push_back(new Object(SIDE_WALL, 0, 0, objects.size()));
+		((Object*)objects.back())->stretch(1, SCREEN_HEIGHT/64.f);
+		
+		objects.push_back(new Object(SIDE_WALL, SCREEN_WIDTH-32, 0, objects.size()));
+		((Object*)objects.back())->stretch(1, SCREEN_HEIGHT/64.f);
+		
+		objects.push_back(new Object(WALL, 32, SCREEN_HEIGHT/2, objects.size()));
+		((Object*)objects.back())->stretchFitX(320);//stretch(SCREEN_WIDTH/96.f, 1);
 
-	objects.push_back(new Object(SIDE_WALL, roundTo8(SCREEN_WIDTH/3 * 2), 0, objects.size()));
-	((Object*)objects.back())->stretchFitY(128);
-	
-	objects.push_back(new Object(WALL, roundTo8(SCREEN_WIDTH/3 * 2), 64, objects.size()));
+		objects.push_back(new Object(SIDE_WALL, roundTo8(SCREEN_WIDTH/3 * 2), 0, objects.size()));
+		((Object*)objects.back())->stretchFitY(128);
+		
+		objects.push_back(new Object(WALL, roundTo8(SCREEN_WIDTH/3 * 2), 64, objects.size()));
 
-	// MISC Objects
-	objects.push_back(new Object(MAGGIE, 180, 180, objects.size()));
-	((Object*)objects.back())->getFrameClip(3, 0)->image_speed = 4;
+		// MISC Objects
+		objects.push_back(new Object(MAGGIE, 180, 180, objects.size()));
+		((Object*)objects.back())->getFrameClip(3, 0)->image_speed = 4;
+
+	}else{
+		// Load from save
+		loadSave("sav.nidsav");
+		
+		// Find Naomi and remove from objects list
+		auto it = std::find_if(objects.begin(), objects.end(), [](auto &x){return ((Object*)x)->id == 0xffff;}); 
+		naomi = (Naomi*)*it;
+		objects.erase(it);
+
+		// Give naomi correct attributes.
+		naomi->step_dist = 8;
+		naomi->walk_speed = 4;
+		naomi->quit = &quit;
+		menu->naomi = naomi;
+
+	}
+
 
 	// FPS Stabilization
 	uint32_t start, end, elapsed;
 
 	while(!quit){
+		// Get frame starttime for FPS correction.
 		start = SDL_GetTicks();
 		if(DEBUG) start64 = SDL_GetPerformanceCounter();
-		frame++;
+
+		frame++; // Frame counter for animation
 		while(SDL_PollEvent(&e)!=0){
 			switch(e.type){
 				case SDL_QUIT:
 					quit = true;
 					break;
 				case SDL_KEYDOWN:
-					// naomi->move(e.key.keysym.sym);
+					// Handle input through menu and naomi
 					menu->input(e.key.keysym.sym);
 					naomi->input(e.key.keysym.sym);
+					
+					// Catch keys for system use.
 					switch(e.key.keysym.sym){
 						case SDLK_TAB:
 							printf("Frame_no: %u\n", frame);
@@ -137,7 +163,6 @@ int main(int argc, char** argv){
 		// Sort vector by depth
 		// Draw Objects By Depth
 		objects.push_back(naomi);
-		
 		std::sort(objects.begin(), objects.end(), [](void* obj1, void* obj2){return ((Object*)obj1)->depth < ((Object*)obj2)->depth;});
 
 		// Draw All Objects On Screen
@@ -152,10 +177,8 @@ int main(int argc, char** argv){
 			((Object*)*it)->draw();
 		}
 
-		
-		// uint16_t nID = 0xffff;
+		// Remove Naomi Object from vector	
 		auto it = std::find(objects.begin(), objects.end(), naomi);
-		// naomi = (Naomi*)*it;
 		objects.erase(it);
 			
 		// Draw Menu
@@ -167,33 +190,46 @@ int main(int argc, char** argv){
 		// FPS Correction, If Needed.
 		end = SDL_GetTicks();
 		elapsed = end-start;
-		
+	
+		// Get more accurate time if debugging
+		if(DEBUG){
+			end64 = SDL_GetPerformanceCounter();
+			elapsed64 = (double)((end64-start64)*1000)/cps;
+		}
+
+		// Draw FPS if user requests it
 		if(SHOW_FPS){
 			char* txt = new char[16];
-			if(elapsed)
-				sprintf(txt, "FPS: %d", 1000/elapsed);
+			if(elapsed or DEBUG)
+				if(DEBUG)
+					sprintf(txt, "FPS: %.1f", 1000/elapsed64);
+				else
+					sprintf(txt, "FPS: %d", 1000/elapsed);
 			else
 				sprintf(txt, "FPS: 1000+");
 			renderText({0,0,0,0}, txt, BLACK, fontSml, TXT_LEFT);
 			delete[] txt;
 		}
-		
+	
+		// Draw to window
 		SDL_RenderPresent(winRenderer);
 
-		if(DEBUG){
-			end64 = SDL_GetPerformanceCounter();
-			elapsed64 = (double)((end64-start64)*1000)/cps;
-		}
+		
+		// Correct for FPS timing
+
 		if(elapsed < TPF){	
 			SDL_Delay(TPF - elapsed);
 		}
 	}
-
+	
+	// Clean Up Objects and Resources 	
 	delete menu;
 	delete naomi;
+	if(DEBUG) puts("Cleaned Naomi and Menu");
 	for(auto& x: objects){
 		delete (Object*)x;
 	}
+	if(DEBUG) puts("Cleaned Objects");
 	cleanObjectTextures();
 	close(); // Clean Up Proceses
 

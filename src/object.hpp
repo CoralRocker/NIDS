@@ -66,7 +66,7 @@ class Object{
 		AVAIL_OBJECTS type;
 		bool solid, visible;	
 
-		uint8_t walk_speed, step_dis;
+		uint8_t walk_speed, step_dist;
 		bool moving, pause;
 };
 

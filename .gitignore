@@ -1,2 +1,4 @@
 *.o
 *.nidsav
+*.dll
+*.exe

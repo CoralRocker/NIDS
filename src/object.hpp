@@ -33,7 +33,7 @@ void cleanObjectTextures();
 class Object{
 	public:
 		// Object Constructor/Destructor
-		Object(AVAIL_OBJECTS type=TABLE, uint16_t x=0, u_int16_t y=0, uint16_t id=0xffff);
+		Object(AVAIL_OBJECTS type=TABLE, uint16_t x=0, uint16_t y=0, uint16_t id=0xffff);
 		~Object();
 
 		// Object Methods

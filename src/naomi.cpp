@@ -15,7 +15,7 @@
  * Naomi objects (duh). It initializes the default walking
  * speed and step distance.
  */
-Naomi::Naomi(uint16_t x, u_int16_t y, uint16_t id) : Object(NAOMI, x, y, id){
+Naomi::Naomi(uint16_t x, uint16_t y, uint16_t id) : Object(NAOMI, x, y, id){
 	moving = false;
 	walk_speed = 4;
 	step_dist = 16;

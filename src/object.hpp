@@ -53,6 +53,7 @@ class Object{
 		int8_t depthCorrect();
 		void decImg();
 		void incImg();
+		void objDump();
 
 		// Operators
 		bool operator<(Object& other);
@@ -60,7 +61,8 @@ class Object{
 
 		// Object Variables
 		uint8_t image_side, image_index, image_speed, numImg, numSubImg;
-		uint16_t depth, id, direction;
+		uint16_t depth, id;
+		int16_t direction;
 		SDL_Rect posRect, clip, bBox;
 		SDL_Texture *sprTextures;
 		AVAIL_OBJECTS type;

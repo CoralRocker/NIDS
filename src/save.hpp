@@ -12,7 +12,9 @@ void save(const char* savefile);
 
 typedef struct {
 	uint8_t image_side, image_index, image_speed;
-	uint16_t depth, direction, id;
+	uint16_t depth;
+	int16_t direction;
+	uint16_t id;
 	SDL_Rect posRect, clip, bBox;
 	AVAIL_OBJECTS type;
 	bool solid, visible, moving;

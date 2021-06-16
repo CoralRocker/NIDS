@@ -189,10 +189,47 @@ void Naomi::input(SDL_Keycode sym){
 			// *quit = true;
 			
 			if(heldObject) heldObject->decImg();
-			printf("");
 			break;
 		case SDLK_e:
 			if(heldObject) heldObject->incImg();
+			break;
+		case SDLK_a:
+			if(heldObject){
+				switch(heldObject->numImg){
+					case 1:
+						break;
+					case 2:
+						heldObject->direction += 90;
+						if(heldObject->direction == 180) heldObject->direction = 0;
+						if(--(heldObject->image_side) == 0xFF) heldObject->image_side = heldObject->numImg-1;
+						break;
+					case 4:
+						heldObject->direction += 90;
+						if(heldObject->direction == 360) heldObject->direction = 0;
+						if(--(heldObject->image_side) == 0xFF) heldObject->image_side = heldObject->numImg-1;
+						break;
+				}
+				heldObject->getFrameClip(heldObject->image_side, 0);
+			}
+			break;
+		case SDLK_d:
+			if(heldObject){
+				switch(heldObject->numImg){
+					case 1:
+						break;
+					case 2:
+						heldObject->direction -= 90;
+						if(heldObject->direction < 0) heldObject->direction = 90;
+						if(++(heldObject->image_side) == heldObject->numImg) heldObject->image_side = 0;
+						break;
+					case 4:
+						heldObject->direction -= 90;
+						if(heldObject->direction < 0) heldObject->direction = 270;
+						if(++(heldObject->image_side) == heldObject->numImg) heldObject->image_side = 0;
+						break;
+				}
+				heldObject->getFrameClip(heldObject->image_side, 0);
+			}
 			break;
 		case SDLK_SPACE:
 			if(objtype == OBJ_MAX) break;

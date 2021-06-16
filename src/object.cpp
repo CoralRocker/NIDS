@@ -1,5 +1,6 @@
 #include "object.hpp"
 #include "gamelib.hpp"
+#include "menu.hpp"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
@@ -369,7 +370,13 @@ Object* Object::draw(){
 	if(!visible) return this;
 
 	// getFrameClip(image_side, image_index);
-	SDL_RenderCopy(winRenderer, sprTextures, &clip, &posRect); 
+	if(numImg == 1 || id == 0xffff) // If only one side or if is Naomi
+		SDL_RenderCopy(winRenderer, sprTextures, &clip, &posRect); 
+	else{
+		//int angle = 360 - direction;
+		SDL_RenderCopyEx(winRenderer, sprTextures, &clip, &posRect, direction, NULL, SDL_FLIP_NONE);
+	}
+
 	if(DEBUG){
 		SDL_Rect cbox = colBox();
 		SDL_RenderDrawRect(winRenderer, &cbox);
@@ -423,4 +430,13 @@ bool Object::operator<(Object& other){
  */
 bool Object::operator==(uint16_t oid){
 	return id == oid;
+}
+
+void Object::objDump(){
+	printf("OBJ %X:\n", id);
+	printf("\tType: %d: %s\n", type, obj_names[type]);
+	printf("\tSides, Subimages: (%d, %d)\n", numImg, numSubImg);
+	printf("\tCurrent Side/SubImg: (%d, %d)\n", image_side, image_index);
+	printf("\tDirection: %d\n", direction);
+	printf("\tPosition: (%d, %d)\n", posRect.x, posRect.y);
 }

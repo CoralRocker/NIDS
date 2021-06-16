@@ -150,7 +150,12 @@ int main(int argc, char** argv){
 						case SDLK_TAB:
 							printf("Frame_no: %u\n", frame);
 							printf("Time of last frame (ms): %u\n", elapsed);
-							if(DEBUG) printf("High-Perf time of last frame (ms): %f\n\n", elapsed64); else puts("");
+							if(DEBUG){
+								printf("High-Perf time of last frame (ms): %f\n\n", elapsed64); 
+								if(naomi->heldObject) naomi->heldObject->objDump();
+							}else 
+								puts("");
+							
 							break;
 					}
 			}

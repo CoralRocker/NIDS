@@ -1,0 +1,32 @@
+Thanks For Trying NIDS!
+
+This is the manual containing information on the game's controls.
+
+## MOVEMENT ##
+-> Use the arrow keys to move up and down
+-> Pressing 'g' will allow you to enter ghost mode and walk through walls and objects.
+
+## MENU ##
+-> Press 'p' to open and close the menu
+-> Use the arrow keys to navigate the menu.
+-> Use enter to select a menu option, and escape to go back.
+ The menu is used to mess around with in-game options and to select objects to place, as well as to save and exit the game correctly.
+
+## OBJECT PLACEMENT ##
+WARNING: Object placement is still a WIP, and is therefore unfinished and rudimentary at best.
+-> When you have selected an object in the menu, press space to create it in front of you.
+-> Move around as you normally do; the object will move with you
+-> Press 'q' or 'e' to cycle through different variations of the object
+-> Press escape to destroy the object or space to place it down. 
+-> Press 'f' to pick up the closest object to you.
+
+## SAVING PROGRESS ##
+-> In the menu, select 'Save & Exit', and press enter twice. This will save and exit the game for you, putting the save in a file called 'sav.nidsav'.
+
+## UPCOMING CHANGES ##
+* The ability to change object colors
+* More objects
+* Rotating objects
+* Toggling on/off object solidity
+* Object depth manipulation
+* More game customization options

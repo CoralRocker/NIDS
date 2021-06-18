@@ -87,6 +87,7 @@ void Naomi::move(SDL_Keycode sym){
 	}
 
 	if(heldObject){
+		int depthcor = heldObject->depth - heldObject->posRect.y - heldObject->depthCorrect();
 		switch(direction){
 			case 0:
 				heldObject->posRect.x = posRect.x + 32;
@@ -105,7 +106,7 @@ void Naomi::move(SDL_Keycode sym){
 				heldObject->posRect.y = posRect.y + 48;
 				break;
 		}
-		heldObject->depth = heldObject->posRect.y + heldObject->depthCorrect();
+		heldObject->depth = heldObject->posRect.y + heldObject->depthCorrect() + depthcor;
 	}
 
 	uint8_t side = direction/90; // 2/pi * theta(radians) gives the proper image index. Simplified to degrees/90.

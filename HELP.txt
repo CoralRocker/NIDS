@@ -17,8 +17,10 @@ WARNING: Object placement is still a WIP, and is therefore unfinished and rudime
 -> When you have selected an object in the menu, press space to create it in front of you.
 -> Move around as you normally do; the object will move with you
 -> Press 'q' or 'e' to cycle through different variations of the object
+-> Press 'a' or 'd' to rotate objects, if they are rotateable.
 -> Press escape to destroy the object or space to place it down. 
 -> Press 'f' to pick up the closest object to you.
+-> Press 'w' or 's' to increase or decrease the held object's depth.
 
 ## SAVING PROGRESS ##
 -> In the menu, select 'Save & Exit', and press enter twice. This will save and exit the game for you, putting the save in a file called 'sav.nidsav'.
@@ -26,8 +28,6 @@ WARNING: Object placement is still a WIP, and is therefore unfinished and rudime
 ## UPCOMING CHANGES ##
 * The ability to change object colors
 * More objects
-* Rotating objects
 * Toggling on/off object solidity
-* Object depth manipulation
 * More game customization options
 * The ability to add new objects

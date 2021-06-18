@@ -233,6 +233,12 @@ void Naomi::input(SDL_Keycode sym){
 				heldObject->correctAngle();
 			}
 			break;
+		case SDLK_w:
+			if(heldObject) heldObject->depth++;
+			break;
+		case SDLK_s:
+			if(heldObject && heldObject->depth > 0) heldObject->depth--;
+			break;
 		case SDLK_SPACE:
 			if(objtype == OBJ_MAX) break;
 			if(heldObject){

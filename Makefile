@@ -5,6 +5,6 @@ libs=-lSDL2 -lSDL2_image -lSDL2_ttf  # `sdl2-config --cflags --libs`
 
 
 naomi:
-	clang++ $(files) $(libs) -o game.o
+	clang++ $(files) $(libs) -o NIDS
 
 	

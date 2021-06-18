@@ -30,3 +30,4 @@ WARNING: Object placement is still a WIP, and is therefore unfinished and rudime
 * Toggling on/off object solidity
 * Object depth manipulation
 * More game customization options
+* The ability to add new objects

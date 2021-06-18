@@ -210,6 +210,7 @@ void Naomi::input(SDL_Keycode sym){
 						break;
 				}
 				heldObject->getFrameClip(heldObject->image_side, 0);
+				heldObject->correctAngle();
 			}
 			break;
 		case SDLK_d:
@@ -229,6 +230,7 @@ void Naomi::input(SDL_Keycode sym){
 						break;
 				}
 				heldObject->getFrameClip(heldObject->image_side, 0);
+				heldObject->correctAngle();
 			}
 			break;
 		case SDLK_SPACE:

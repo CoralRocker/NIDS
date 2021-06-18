@@ -335,11 +335,40 @@ Object* Object::step(){
 	return this;
 }	
 
+void Object::correctAngle(){
+	SDL_Rect pos = posRect, box = bBox;
+	
+	switch(numImg){
+		case 2:
+			switch(direction){
+				case 0:
+					resetSize();
+					break;
+				case 90:
+					double xFact = bBox.x / (double)posRect.w;
+					double yFact = bBox.y / (double)posRect.h;
+					printf("Xfact: %f, Yfact: %f\n", xFact, yFact);
+					printf("bBox.x: %d posRect.w: %d\n", bBox.x, posRect.w);
+					printf("bBox.y: %d posRect.h: %d\n", bBox.y, posRect.h);
+					bBox.x = std::nearbyint(xFact * posRect.h);
+					bBox.y = std::nearbyint(yFact * posRect.w);
+					bBox.w = (bBox.w/(double)posRect.w)*posRect.h;
+					bBox.h = (bBox.h/(double)posRect.h)*posRect.w;
+					
+					posRect.w = posRect.h;
+					posRect.h = pos.w;
+					break;
+			}
+			break;
+	}	
+
+}
+
 /** Set The Current Sprite
  * uint8_t side, subImg: the side number of the sprite, and the subimage number within that side
  */
 Object* Object::getFrameClip(uint8_t side, uint8_t subImg){
-	clip = {subImg*posRect.w, side*posRect.h, posRect.w, posRect.h};
+	clip = {subImg*OBJ_DATA[type][2], side*OBJ_DATA[type][3], OBJ_DATA[type][2], OBJ_DATA[type][3]};
 	image_index = subImg;
 	image_side  = side;
 	
@@ -374,13 +403,16 @@ Object* Object::draw(){
 		SDL_RenderCopy(winRenderer, sprTextures, &clip, &posRect); 
 	else{
 		//int angle = 360 - direction;
-		SDL_RenderCopyEx(winRenderer, sprTextures, &clip, &posRect, direction, NULL, SDL_FLIP_NONE);
+		SDL_Rect tmp = {posRect.x+(direction!=0?posRect.w:0), posRect.y, clip.w, clip.h};
+		SDL_Point cntr = {0,0};
+		SDL_RenderCopyEx(winRenderer, sprTextures, &clip, &tmp, direction, &cntr, SDL_FLIP_NONE);//SDL_FLIP_NONE);
+		
 	}
 
 	if(DEBUG){
 		SDL_Rect cbox = colBox();
 		SDL_RenderDrawRect(winRenderer, &cbox);
-		SDL_Rect sBox = {posRect.x, posRect.y, clip.w, clip.h};
+		SDL_Rect sBox = {posRect.x, posRect.y, posRect.w, posRect.h};
 		SDL_RenderDrawRect(winRenderer, &sBox);
 		SDL_RenderDrawLine(winRenderer, posRect.x, depth, posRect.x+clip.w, depth);
 	}
@@ -408,12 +440,14 @@ int8_t Object::depthCorrect(){
 	return OBJ_DEPTH_CORRECT[type];
 }
 
+/** These two functions either increase or decrease the image_index,
+ * wrapping around in either direction.
+ */
 void Object::decImg(){
 	int simg = image_index - 1;
 	if(simg < 0) simg = numSubImg-1;
 	getFrameClip(image_side, simg);
 }
-
 void Object::incImg(){
 	int simg = image_index + 1;
 	if(simg >= numSubImg) simg = 0;
@@ -432,6 +466,8 @@ bool Object::operator==(uint16_t oid){
 	return id == oid;
 }
 
+/** Prints out object information. Used for debugging objects.
+ */
 void Object::objDump(){
 	printf("OBJ %X:\n", id);
 	printf("\tType: %d: %s\n", type, obj_names[type]);
@@ -439,4 +475,6 @@ void Object::objDump(){
 	printf("\tCurrent Side/SubImg: (%d, %d)\n", image_side, image_index);
 	printf("\tDirection: %d\n", direction);
 	printf("\tPosition: (%d, %d)\n", posRect.x, posRect.y);
+	printf("\tWidth, Height: (%d,%d\n", posRect.w, posRect.h);
+	printf("\tbBox: (%d, %d, %d, %d)\n", bBox.x, bBox.y, bBox.w, bBox.h);
 }

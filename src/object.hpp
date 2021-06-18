@@ -54,6 +54,7 @@ class Object{
 		void decImg();
 		void incImg();
 		void objDump();
+		void correctAngle();
 
 		// Operators
 		bool operator<(Object& other);

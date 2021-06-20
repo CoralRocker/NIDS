@@ -477,4 +477,5 @@ void Object::objDump(){
 	printf("\tPosition: (%d, %d)\n", posRect.x, posRect.y);
 	printf("\tWidth, Height: (%d,%d\n", posRect.w, posRect.h);
 	printf("\tbBox: (%d, %d, %d, %d)\n", bBox.x, bBox.y, bBox.w, bBox.h);
+	printf("\tSolid: %s\n", solid?"true":"false");
 }

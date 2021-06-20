@@ -157,7 +157,6 @@ void Naomi::findNearest(){
 		uint16_t pos[2];
 		tmp->getCxy(pos);
 		tdist = std::hypot((sx - pos[0]), (sy - pos[1]));
-		// if((dist - tdist) > std::sqrt(2)){
 		if(tdist < dist){
 			dist = tdist;
 			closest = tmp;
@@ -165,7 +164,6 @@ void Naomi::findNearest(){
 	}
 
 	heldObject = closest;
-	heldObject->solid = false;
 	if(objtype == OBJ_MAX) objtype = closest->type;
 }
 
@@ -186,9 +184,6 @@ void Naomi::input(SDL_Keycode sym){
 			break;
 		case SDLK_q:
 			if(DEBUG && keyboard[SDL_SCANCODE_ESCAPE]) *quit = true;
-			// The only quit method should be the menu quit.
-			// *quit = true;
-			
 			if(heldObject) heldObject->decImg();
 			break;
 		case SDLK_e:
@@ -240,19 +235,12 @@ void Naomi::input(SDL_Keycode sym){
 		case SDLK_s:
 			if(heldObject && heldObject->depth > 0) heldObject->depth--;
 			break;
+		case SDLK_z:
+			if(heldObject) heldObject->solid = 1 - heldObject->solid;
+			break;
 		case SDLK_SPACE:
 			if(objtype == OBJ_MAX) break;
 			if(heldObject){
-				heldObject->solid = true;
-				switch(heldObject->type){
-					case SMALL_PLANTS:
-					case STOOL:
-						heldObject->solid = false;
-						break;
-					default:
-						heldObject->solid = true;
-						break;
-				}
 				heldObject = NULL; 
 			}else objectPlace(); // Release grasp of object if we're holding one		
 			break;
@@ -297,7 +285,6 @@ void Naomi::objectPlace(){
 		}
 		Object* tObj = new Object(objtype, x, y, objects.size());
 		heldObject = tObj;
-		heldObject->solid=false;
 		objects.push_back(tObj);
 	}else{
 		objects.erase(std::find(objects.begin(), objects.end(), heldObject));
@@ -313,7 +300,7 @@ void Naomi::objectPlace(){
 bool Naomi::placeFree(SDL_Rect place){
 	for(std::vector<void*>::iterator it = objects.begin(); it != objects.end(); it++){
 		if(!((Object*)*it)->solid) continue;
-
+		if(heldObject == *it) continue;	
 		SDL_Rect tBox = ((Object*)*it)->colBox();
 		SDL_bool res = SDL_HasIntersection(&place, &tBox);
 		if(res == SDL_TRUE)

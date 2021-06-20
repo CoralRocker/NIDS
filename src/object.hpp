@@ -6,6 +6,8 @@
 #include <string>
 #include <stdint.h>
 
+#include "gamelib.hpp"
+
 enum AVAIL_OBJECTS {
 	NAOMI,
 	TABLE, MOD_TABLE, STOOL,
@@ -67,6 +69,8 @@ class Object{
 		SDL_Rect posRect, clip, bBox;
 		SDL_Texture *sprTextures;
 		AVAIL_OBJECTS type;
+		ColorCodes colormod;
+
 		bool solid, visible;	
 
 		uint8_t walk_speed, step_dist;

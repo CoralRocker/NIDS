@@ -7,6 +7,7 @@
 #include <stdint.h>
 
 #include "object.hpp"
+#include "gamelib.hpp"
 
 class Naomi : public Object {
 	public:
@@ -24,7 +25,7 @@ class Naomi : public Object {
 		bool* quit;
 		uint8_t walk_speed, step_dist;
 		bool moving, ghost;
-		
+		ColorCodes objcolmod;
 		AVAIL_OBJECTS objtype;
 		Object* heldObject;
 };

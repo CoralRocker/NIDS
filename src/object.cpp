@@ -204,7 +204,7 @@ Object::Object(AVAIL_OBJECTS type, uint16_t x, uint16_t y, uint16_t id){
 	}
 	bBox = BBOX_DATA[type];
 	visible = true;
-
+	colormod = WHITE;
 	getFrameClip(0, 0);
 }
 
@@ -402,11 +402,16 @@ Object* Object::draw(){
 	if(numImg == 1 || id == 0xffff) // If only one side or if is Naomi
 		SDL_RenderCopy(winRenderer, sprTextures, &clip, &posRect); 
 	else{
-		//int angle = 360 - direction;
+		if(colormod != WHITE)
+			SDL_SetTextureColorMod(sprTextures, rgbColors[colormod][0], rgbColors[colormod][1], rgbColors[colormod][2]);
+
 		SDL_Rect tmp = {posRect.x+(direction!=0?posRect.w:0), posRect.y, clip.w, clip.h};
 		SDL_Point cntr = {0,0};
-		SDL_RenderCopyEx(winRenderer, sprTextures, &clip, &tmp, direction, &cntr, SDL_FLIP_NONE);//SDL_FLIP_NONE);
+		SDL_RenderCopyEx(winRenderer, sprTextures, &clip, &tmp, direction, &cntr, SDL_FLIP_NONE);
 		
+		if(colormod != WHITE)
+			SDL_SetTextureColorMod(sprTextures, 255, 255, 255);
+
 	}
 
 	if(DEBUG){

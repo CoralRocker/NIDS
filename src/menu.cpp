@@ -80,13 +80,13 @@ void Menu::input(SDL_Keycode sym){
 		case SDLK_RIGHT:
 			if(sel.size() == 1){ 
 				sel[0]++;
-				if(sel[0] >= 3) sel[0] = 0;
+				if(sel[0] >= 4) sel[0] = 0;
 			}
 			break;
 		case SDLK_LEFT:
 			if(sel.size() == 1){ 
 				sel[0]--;
-				if(sel[0] > 3) sel[0] = 2;
+				if(sel[0] > 4) sel[0] = 3;
 			}
 			break;
 		case SDLK_RETURN:
@@ -130,6 +130,9 @@ void Menu::input(SDL_Keycode sym){
 							}
 							break;
 						case 2:
+							naomi->objcolmod = (ColorCodes)sel[1];
+							break;
+						case 3:
 							*naomi->quit = true;
 							objects.push_back(naomi);
 							save("sav.nidsav");
@@ -152,18 +155,25 @@ void Menu::input(SDL_Keycode sym){
 					if(++sel[1] == OBJ_MAX) sel[1] = 0;
 					break;
 				case 1:
-					if(++sel[1] == MENU_MAX) sel[1] = MENU_MAX-1;
+					if(++sel[1] == MENU_MAX) sel[1] = MENU_MAX - 1;
 					break;
+				case 2: 
+					if(++sel[1] == COLOR_MAX) sel[1] = 0;
+					break;
+
 			}
 			break;
 		case SDLK_DOWN:
 			if(!(sel.size() == 2)) break; 
 			switch(sel[0]){
 				case 0:
-					if(sel[1]-- == 0) sel[1] = OBJ_MAX-1;
+					if(sel[1]-- == 0) sel[1] = OBJ_MAX - 1;
 					break;
 				case 1:
 					if(sel[1]-- == 0) sel[1] = 0;
+					break;
+				case 2:
+					if(sel[1]-- == 0) sel[1] = COLOR_MAX - 1;
 					break;
 			}
 			break;
@@ -187,28 +197,31 @@ void Menu::draw(){
 
 	TTF_Font* fnt = fontMed;
 
-	for(int i = 0; i < 3; i++){
+	for(int i = 0; i < 4; i++){
 		switch(i){
 			case 0:
 				if(i == sel[0]) fnt = fontLrg; else fnt = fontMed;
-				renderText({SCREEN_WIDTH/4, SCREEN_HEIGHT - 48, 0,0}, "OBJECTS", PRED, fnt, TXT_MIDDLE);
+				renderText({SCREEN_WIDTH/5, SCREEN_HEIGHT - 48, 0,0}, "OBJECTS", PRED, fnt, TXT_MIDDLE);
 				break;
 			case 1:
 				if(i == sel[0]) fnt = fontLrg; else fnt = fontMed;
-				renderText({SCREEN_WIDTH/2, SCREEN_HEIGHT - 48, 0,0}, "OPTIONS", ORANGE, fnt, TXT_MIDDLE);
+				renderText({SCREEN_WIDTH/5 * 2, SCREEN_HEIGHT - 48, 0,0}, "OPTIONS", ORANGE, fnt, TXT_MIDDLE);
 				break;
 			case 2:
 				if(i == sel[0]) fnt = fontLrg; else fnt = fontMed;
-				renderText({SCREEN_WIDTH/4 * 3, SCREEN_HEIGHT - 48, 0,0}, "SAVE & EXIT", YELLOW, fnt, TXT_MIDDLE);
+				renderText({SCREEN_WIDTH/5 * 3, SCREEN_HEIGHT - 48, 0,0}, "COLORS", LBLUE, fnt, TXT_MIDDLE);
 				break;
-
+			case 3:
+				if(i == sel[0]) fnt = fontLrg; else fnt = fontMed;
+				renderText({SCREEN_WIDTH/5 * 4, SCREEN_HEIGHT - 48, 0,0}, "SAVE & EXIT", YELLOW, fnt, TXT_MIDDLE);
+				break;
 		}
 	}
 	if(sel.size() == 2){
 		switch(sel[0]){
 			case 0: {
 				tBox = stretch(0.75, 2);
-				tBox.x = SCREEN_WIDTH/4 * (sel[0]+1) - tBox.w/2;
+				tBox.x = SCREEN_WIDTH/5 - tBox.w/2;
 				tBox.y = SCREEN_HEIGHT - 96 - tBox.h;
 				SDL_RenderCopy(winRenderer, textBox, NULL, &tBox);
 				
@@ -216,7 +229,7 @@ void Menu::draw(){
 				if(indx < 0) indx = OBJ_MAX + sel[1] - 2; // Correct for indexes less than 2;
 				for(int i = 0; i < 5; i++){
 					fnt = (i == 2) ? fontMed : fontSml;
-					renderText({SCREEN_WIDTH/4, SCREEN_HEIGHT - 96 - (tBox.h/6 * (i+1)),0,0}, obj_names[indx], BLACK, fnt, TXT_MIDDLE);
+					renderText({SCREEN_WIDTH/5, SCREEN_HEIGHT - 96 - (tBox.h/6 * (i+1)),0,0}, obj_names[indx], BLACK, fnt, TXT_MIDDLE);
 					indx++;
 					if(indx == OBJ_MAX) indx = 0;
 				}
@@ -224,7 +237,7 @@ void Menu::draw(){
 				}
 			case 1:
 				tBox = stretch(1, (MENU_MAX*0.5));
-				tBox.x = SCREEN_WIDTH/2 - tBox.w/2;
+				tBox.x = SCREEN_WIDTH/5 * 2 - tBox.w/2;
 				tBox.y = SCREEN_HEIGHT - 96 - tBox.h;
 				SDL_RenderCopy(winRenderer, textBox, NULL, &tBox);
 				for(int i = 0; i < MENU_MAX; i++){
@@ -248,17 +261,33 @@ void Menu::draw(){
 							sprintf(tmpstr, "%s", opt_names[i]);
 							break;
 					}
-					renderText({SCREEN_WIDTH/2, SCREEN_HEIGHT - 96 - (tBox.h/(MENU_MAX+1) * (i+1)), 0,0}, tmpstr, BLACK, fnt, TXT_MIDDLE);
+					renderText({SCREEN_WIDTH/5 * 2, SCREEN_HEIGHT - 96 - (tBox.h/(MENU_MAX+1) * (i+1)), 0,0}, tmpstr, BLACK, fnt, TXT_MIDDLE);
 					delete[] tmpstr;
 				}
 				break;
-			case 2:
-				tBox = stretch(0.75, 0.5);
-				tBox.x = SCREEN_WIDTH/4 * 3 - tBox.w/2;
+			case 2: {
+				tBox = stretch(0.75, 2);
+				tBox.x = SCREEN_WIDTH/5 * 3 - tBox.w/2;
 				tBox.y = SCREEN_HEIGHT - 96 - tBox.h;
 				SDL_RenderCopy(winRenderer, textBox, NULL, &tBox);
 				
-				renderText({SCREEN_WIDTH/4 * 3, SCREEN_HEIGHT - 96 - tBox.h/2, 0,0}, "EXIT?", BLACK, fontLrg, TXT_MIDDLE);
+				int indx = sel[1] - 2;
+				if(indx < 0) indx = COLOR_MAX + sel[1] - 2; // Correct for indexes less than 2;
+				for(int i = 0; i < 5; i++){
+					fnt = (i == 2) ? fontMed : fontSml;
+					renderText({SCREEN_WIDTH/5 * 3, SCREEN_HEIGHT - 96 - (tBox.h/6 * (i+1)),0,0}, colorNames[indx], (ColorCodes)indx, fnt, TXT_MIDDLE);
+					indx++;
+					if(indx == COLOR_MAX) indx = 0;
+				}
+				break;
+				}
+			case 3:
+				tBox = stretch(0.75, 0.5);
+				tBox.x = SCREEN_WIDTH/5 * 4 - tBox.w/2;
+				tBox.y = SCREEN_HEIGHT - 96 - tBox.h;
+				SDL_RenderCopy(winRenderer, textBox, NULL, &tBox);
+				
+				renderText({SCREEN_WIDTH/5 * 4, SCREEN_HEIGHT - 96 - tBox.h/2, 0,0}, "EXIT?", BLACK, fontLrg, TXT_MIDDLE);
 				break;
 		}
 	}

@@ -26,6 +26,19 @@ double TPF = 1000.f/FPS;
 
 std::vector<void*> objects;
 
+const char* colorNames[COLOR_MAX] = {
+	"BLACK", "WHITE",
+	"RED",
+	"GREEN",
+	"BLUE",
+	"PURPLE",
+	"YELLOW",
+	"LIGHT BLUE",
+	"PASTEL RED",
+	"ORANGE",
+	"LIGHT GREEN"
+};
+
 const SDL_Color colors[COLOR_MAX] = {
 	{0,0,0,255}, {255, 255, 255, 255},
 	{255, 0, 0, 255}, 
@@ -37,6 +50,19 @@ const SDL_Color colors[COLOR_MAX] = {
 	{253, 134, 134, 255},
 	{255, 167, 124, 255},
 	{181, 212, 102, 255}
+};
+
+const uint8_t rgbColors[COLOR_MAX][3] = {
+	{0,0,0},{255,255,255},
+	{255,0,0},
+	{0,128,0},
+	{0,0,255},
+	{128,0,128},
+	{249,214,45},
+	{0,219,221},
+	{253,134,134},
+	{255,167,124},
+	{181,212,102}
 };
 
 void renderText(SDL_Rect position, const char* str, ColorCodes clrcd, TTF_Font* font, textModes mode){

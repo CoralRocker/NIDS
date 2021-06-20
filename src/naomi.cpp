@@ -23,6 +23,7 @@ Naomi::Naomi(uint16_t x, uint16_t y, uint16_t id) : Object(NAOMI, x, y, id){
 	objtype = OBJ_MAX;
 	heldObject = NULL;
 	ghost = false;
+	objcolmod = WHITE;
 }
 
 /** The step function runs every frame of the game. 
@@ -285,6 +286,7 @@ void Naomi::objectPlace(){
 		}
 		Object* tObj = new Object(objtype, x, y, objects.size());
 		heldObject = tObj;
+		heldObject->colormod = objcolmod;
 		objects.push_back(tObj);
 	}else{
 		objects.erase(std::find(objects.begin(), objects.end(), heldObject));

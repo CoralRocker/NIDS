@@ -14,8 +14,8 @@
 #include <vector>
 #include <memory>
 
-#include "object.hpp"
-#include "naomi.hpp"
+//#include "object.hpp"
+//#include "naomi.hpp"
 
 const short SCREEN_WIDTH = 640;//1152;
 const short SCREEN_HEIGHT = 480;//852;
@@ -38,7 +38,9 @@ enum ColorCodes{
 
 	COLOR_MAX
 };
+extern const char* colorNames[COLOR_MAX];
 extern const SDL_Color colors[COLOR_MAX];
+extern const uint8_t rgbColors[COLOR_MAX][3];
 
 enum errCodes
 {

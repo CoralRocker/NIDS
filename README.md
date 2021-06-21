@@ -6,7 +6,7 @@ This branch contains the source code for the game. The game was written in C++/S
 To build this, simply clone the repository and use the `make` command to build the project. Thats it!
 
 # Windows Installation
-The windows release package is available [here](github.com/CoralRocker/NIDS/releases).
+The windows release package is available [here](https://github.com/CoralRocker/NIDS/releases).
 
 # TODO
 * Change Object Colors (Partially Finished)

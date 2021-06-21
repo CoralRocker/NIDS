@@ -143,6 +143,7 @@ void Menu::input(SDL_Keycode sym){
 			}
 			break;
 		case SDLK_ESCAPE:
+			if(sel.size() == 1 && *pause){sel[0]=0;*pause = 1 - (*pause);break;}
 			while(sel.size() > 1){
 				sel.pop_back();
 			}

@@ -29,7 +29,7 @@ void loadSave(const char* savefile){
 			n->solid = obj.solid;
 			n->visible = obj.visible;
 			n->moving = obj.moving;
-
+			n->objcolmod = obj.colmod;
 			objects.push_back(n);
 
 		}else{
@@ -46,7 +46,7 @@ void loadSave(const char* savefile){
 			o->solid = obj.solid;
 			o->visible = obj.visible;
 			o->moving = obj.moving;
-
+			o->colormod = obj.colmod;
 			objects.push_back(o);
 		}
 	}
@@ -66,7 +66,8 @@ void save(const char* savefile){
 			((Object*)x)->depth, ((Object*)x)->direction, ((Object*)x)->id,
 			((Object*)x)->posRect, ((Object*)x)->clip, ((Object*)x)->bBox,
 			((Object*)x)->type,
-			((Object*)x)->solid, ((Object*)x)->visible, ((Object*)x)->moving
+			((Object*)x)->solid, ((Object*)x)->visible, ((Object*)x)->moving,
+			((Object*)x)->type == NAOMI ? ((Naomi*)x)->objcolmod : ((Object*)x)->colormod
 		};
 		fwrite(&obj, sizeof(SAVE_OBJ), 1, sf);
 	}

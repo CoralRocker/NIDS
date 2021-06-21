@@ -27,11 +27,10 @@ WARNING: Object placement is still a WIP, and is therefore unfinished and rudime
 -> In the menu, select 'Save & Exit', and press enter twice. This will save and exit the game for you, putting the save in a file called 'sav.nidsav'.
 
 ## UPCOMING CHANGES ##
-* The ability to change object colors (Partially Finished)
 * More objects
 * More game customization options
 * The ability to add new objects
 * Undo Buffer? (Think ctrl+z)
 * Better color selection UI
 * Refactor object menu selection
-
+* Improve the game's controls

@@ -2,6 +2,7 @@
 #define SAVE_H
 
 #include "object.hpp"
+#include "gamelib.hpp"
 
 #include <cstdint>
 #include <SDL2/SDL.h>
@@ -18,6 +19,7 @@ typedef struct {
 	SDL_Rect posRect, clip, bBox;
 	AVAIL_OBJECTS type;
 	bool solid, visible, moving;
+	ColorCodes colmod;
 } SAVE_OBJ;
 
 #endif

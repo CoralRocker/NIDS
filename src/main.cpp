@@ -29,7 +29,7 @@ int main(int argc, char** argv){
 	// Clear Window
 	SDL_RenderClear(winRenderer);
 	
-	//SDL_RenderSetLogicalSize(winRenderer, 1280, 960);
+	SDL_RenderSetLogicalSize(winRenderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 	//SDL_RenderSetScale(winRenderer, 2, 2);
 
 	// Load Media
@@ -86,23 +86,45 @@ int main(int argc, char** argv){
 
 		// Walls
 		Object* tmpObj;
-
+		
+		//T
 		objects.push_back(new Object(WALL, 0, 0, objects.size()));
 		((Object*)objects.back())->stretch(SCREEN_WIDTH/32.f, 1);
 		
+		//L
 		objects.push_back(new Object(SIDE_WALL, 0, 0, objects.size()));
 		((Object*)objects.back())->stretch(1, SCREEN_HEIGHT/64.f);
 		
+		//R
 		objects.push_back(new Object(SIDE_WALL, SCREEN_WIDTH-32, 0, objects.size()));
 		((Object*)objects.back())->stretch(1, SCREEN_HEIGHT/64.f);
 		
+		//Right Mid wall
 		objects.push_back(new Object(WALL, 32, SCREEN_HEIGHT/2, objects.size()));
-		((Object*)objects.back())->stretchFitX(320);//stretch(SCREEN_WIDTH/96.f, 1);
-
-		objects.push_back(new Object(SIDE_WALL, roundTo8(SCREEN_WIDTH/3 * 2), 0, objects.size()));
-		((Object*)objects.back())->stretchFitY(128);
+		((Object*)objects.back())->stretchFitX(roundTo8(SCREEN_WIDTH/7.f * 2));//stretch(SCREEN_WIDTH/96.f, 1);
 		
-		objects.push_back(new Object(WALL, roundTo8(SCREEN_WIDTH/3 * 2), 64, objects.size()));
+		//Left Mid wall
+		objects.push_back(new Object(WALL, roundTo8(SCREEN_WIDTH/7*4),SCREEN_HEIGHT/3 * 2, objects.size()));
+		((Object*)objects.back())->stretchFitX(roundTo8(SCREEN_WIDTH/7*3 - 24));
+
+		//Top Laundry wall
+		objects.push_back(new Object(SIDE_WALL, roundTo8(SCREEN_WIDTH/7 * 4), 0, objects.size()));
+		((Object*)objects.back())->stretchFitY(128);
+		objects.push_back(new Object(WALL, roundTo8(SCREEN_WIDTH/7 * 4), 64, objects.size()));
+		
+		//Bottom Laundry wall
+		objects.push_back(new Object(SIDE_WALL, roundTo8(SCREEN_WIDTH/7*4), 152, objects.size()));
+		((Object*)objects.back())->stretchFitY(SCREEN_HEIGHT/3 - 32);
+
+		// Top Bathroom wall
+		objects.push_back(new Object(WALL, roundTo8(SCREEN_WIDTH/7*4), SCREEN_HEIGHT/3 + 56, objects.size()));
+
+		// Bottom Bathroom wall
+		objects.push_back(new Object(SIDE_WALL, roundTo8(SCREEN_WIDTH/7*4), SCREEN_HEIGHT/3 + 48+32+64, objects.size()));
+
+		// Laundry/Bathroom Wall
+		objects.push_back(new Object(WALL, roundTo8(SCREEN_WIDTH/7*4 + 32), SCREEN_HEIGHT/3, objects.size()));
+		((Object*)objects.back())->stretchFitX(roundTo8(SCREEN_WIDTH/3-16));
 
 		// MISC Objects
 		objects.push_back(new Object(MAGGIE, 180, 180, objects.size()));
@@ -152,6 +174,7 @@ int main(int argc, char** argv){
 							printf("Time of last frame (ms): %u\n", elapsed);
 							if(DEBUG){
 								printf("High-Perf time of last frame (ms): %f\n\n", elapsed64); 
+								naomi->objDump();
 								if(naomi->heldObject) naomi->heldObject->objDump();
 							}else 
 								puts("");

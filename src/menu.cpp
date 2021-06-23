@@ -196,24 +196,24 @@ void Menu::draw(){
 	tBox.y = SCREEN_HEIGHT - 96;
 	SDL_RenderCopy(winRenderer, textBox, NULL, &tBox);
 
-	TTF_Font* fnt = fontMed;
+	TTF_Font* fnt = fontSml;
 
 	for(int i = 0; i < 4; i++){
 		switch(i){
 			case 0:
-				if(i == sel[0]) fnt = fontLrg; else fnt = fontMed;
+				if(i == sel[0]) fnt = fontMed; else fnt = fontSml;
 				renderText({SCREEN_WIDTH/5, SCREEN_HEIGHT - 48, 0,0}, "OBJECTS", PRED, fnt, TXT_MIDDLE);
 				break;
 			case 1:
-				if(i == sel[0]) fnt = fontLrg; else fnt = fontMed;
+				if(i == sel[0]) fnt = fontMed; else fnt = fontSml;
 				renderText({SCREEN_WIDTH/5 * 2, SCREEN_HEIGHT - 48, 0,0}, "OPTIONS", ORANGE, fnt, TXT_MIDDLE);
 				break;
 			case 2:
-				if(i == sel[0]) fnt = fontLrg; else fnt = fontMed;
+				if(i == sel[0]) fnt = fontMed; else fnt = fontSml;
 				renderText({SCREEN_WIDTH/5 * 3, SCREEN_HEIGHT - 48, 0,0}, "COLORS", LBLUE, fnt, TXT_MIDDLE);
 				break;
 			case 3:
-				if(i == sel[0]) fnt = fontLrg; else fnt = fontMed;
+				if(i == sel[0]) fnt = fontMed; else fnt = fontSml;
 				renderText({SCREEN_WIDTH/5 * 4, SCREEN_HEIGHT - 48, 0,0}, "SAVE & EXIT", YELLOW, fnt, TXT_MIDDLE);
 				break;
 		}
@@ -288,7 +288,7 @@ void Menu::draw(){
 				tBox.y = SCREEN_HEIGHT - 96 - tBox.h;
 				SDL_RenderCopy(winRenderer, textBox, NULL, &tBox);
 				
-				renderText({SCREEN_WIDTH/5 * 4, SCREEN_HEIGHT - 96 - tBox.h/2, 0,0}, "EXIT?", BLACK, fontLrg, TXT_MIDDLE);
+				renderText({SCREEN_WIDTH/5 * 4, SCREEN_HEIGHT - 96 - tBox.h/2, 0,0}, "EXIT?", BLACK, fontMed, TXT_MIDDLE);
 				break;
 		}
 	}

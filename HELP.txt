@@ -27,6 +27,7 @@ WARNING: Object placement is still a WIP, and is therefore unfinished and rudime
 -> In the menu, select 'Save & Exit', and press enter twice. This will save and exit the game for you, putting the save in a file called 'sav.nidsav'.
 
 ## UPCOMING CHANGES ##
+* Finish Maggie
 * More objects
 * More game customization options
 * The ability to add new objects

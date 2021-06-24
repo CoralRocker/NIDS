@@ -16,7 +16,6 @@
 #include "save.hpp"
 
 const char *obj_names[OBJ_MAX] = {
-	"Naomi",
 	"Table", "Modular Table", "Stool",
 	"Cabinet", "Tall Cabinet",
 	"Desk", "Modular Desk", "Desk Chair",
@@ -24,7 +23,9 @@ const char *obj_names[OBJ_MAX] = {
 	"Bonsai", "Small Plants", "Medium Plants", "Large Plants", "Extra-Large Plants",
 	"Toilet", "Misc. Bathroom", "Bathtub", "Sink Vanity", "Sink Cabinet",
 	"Bed", "TV",
+	
 	"Wall", "Side Wall",
+	"Naomi",
 	"Maggie"
 };
 
@@ -152,9 +153,24 @@ void Menu::input(SDL_Keycode sym){
 		case SDLK_UP:
 			if(!(sel.size() == 2)) break;
 			switch(sel[0]){
-				case 0:
+				case 0:{
 					if(++sel[1] == OBJ_MAX) sel[1] = 0;
+					bool exit = false;
+					while(!exit){
+						switch(sel[1]){
+							case NAOMI:
+							case MAGGIE:
+							case WALL:
+							case SIDE_WALL:
+								if(++sel[1] == OBJ_MAX) sel[1] = 0;
+								break;
+							default:
+								exit = true;
+								break;
+						}
+					}
 					break;
+					}
 				case 1:
 					if(++sel[1] == MENU_MAX) sel[1] = MENU_MAX - 1;
 					break;
@@ -167,9 +183,25 @@ void Menu::input(SDL_Keycode sym){
 		case SDLK_DOWN:
 			if(!(sel.size() == 2)) break; 
 			switch(sel[0]){
-				case 0:
+				case 0:{
 					if(sel[1]-- == 0) sel[1] = OBJ_MAX - 1;
+					bool exit = false;
+					while(!exit){
+						switch(sel[1]){
+							case NAOMI:
+							case MAGGIE:
+							case WALL:
+							case SIDE_WALL:
+								if(sel[1]-- == 0) sel[1] = OBJ_MAX - 1;
+								break;
+							default:
+								exit = true;
+								break;
+						}
+					}
+					
 					break;
+				       }
 				case 1:
 					if(sel[1]-- == 0) sel[1] = 0;
 					break;
@@ -227,12 +259,12 @@ void Menu::draw(){
 				SDL_RenderCopy(winRenderer, textBox, NULL, &tBox);
 				
 				int indx = sel[1] - 2;
-				if(indx < 0) indx = OBJ_MAX + sel[1] - 2; // Correct for indexes less than 2;
+				if(indx < 0) indx = OBJ_MAX + sel[1] - 6; // Correct for indexes less than 2;
 				for(int i = 0; i < 5; i++){
 					fnt = (i == 2) ? fontMed : fontSml;
 					renderText({SCREEN_WIDTH/5, SCREEN_HEIGHT - 96 - (tBox.h/6 * (i+1)),0,0}, obj_names[indx], BLACK, fnt, TXT_MIDDLE);
 					indx++;
-					if(indx == OBJ_MAX) indx = 0;
+					if(indx == OBJ_MAX-4) indx = 0;
 				}
 				break;
 				}

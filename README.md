@@ -6,10 +6,9 @@ This branch contains the source code for the game. The game was written in C++/S
 To build this, simply clone the repository and use the `make` command to build the project. Thats it!
 
 # Windows Installation
-The windows release package is available [here](https://github.com/CoralRocker/NIDS/releases).
+The windows release package is available [here](https://github.com/CoralRocker/NIDS/releases). Unzip the zip file that contains the latest release of the game, and extract the contents to wherever you'd like the game directory to be. The zip file contains folders and DLL files which allow the game to run correctly. PLEASE DONT MOVE THESE. If you'd like to have the game on your desktop, make a shortcut. The NIDS.exe file is statically linked to the C and C++ windows libraries, so you will not have to download any extraneous DLLs or redistributeables.
 
 # TODO
-* Change Object Colors (Partially Finished)
 * Add more objects
 * More in-game options, including movement amount and animation speeds
 * Player-Created objects

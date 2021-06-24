@@ -36,7 +36,7 @@ SDL_Rect BBOX_DATA[OBJ_MAX] = {
 	{0, 31, 31, 15}, {0, 0, 31, 31}, {0, 15, 31, 31}, {0, 31, 31, 31}, {0, 32, 63, 31},
 	{0, 15, 31, 48}, {2, 0, 27, 29}, {0, 0, 63, 63}, {0, 47, 63, 32}, {0, 15, 63, 32},
 	{7, 31, 65, 48}, {2, 6, 57, 39},
-	{0, 32, 32, 31}, {0, 0, 32, 64},
+	{0, 32, 32, 32}, {0, 0, 32, 64},
 
 	{0, 0, 48, 32}
 };
@@ -398,22 +398,20 @@ Object* Object::nextFrame(uint32_t frame_no){
 Object* Object::draw(){
 	if(!visible) return this;
 
-	// getFrameClip(image_side, image_index);
+	if(colormod != WHITE)
+		SDL_SetTextureColorMod(sprTextures, rgbColors[colormod][0], rgbColors[colormod][1], rgbColors[colormod][2]);
+	
 	if(numImg == 1 || id == 0xffff) // If only one side or if is Naomi
 		SDL_RenderCopy(winRenderer, sprTextures, &clip, &posRect); 
 	else{
-		if(colormod != WHITE)
-			SDL_SetTextureColorMod(sprTextures, rgbColors[colormod][0], rgbColors[colormod][1], rgbColors[colormod][2]);
-
 		SDL_Rect tmp = {posRect.x+(direction!=0?posRect.w:0), posRect.y, clip.w, clip.h};
 		SDL_Point cntr = {0,0};
 		SDL_RenderCopyEx(winRenderer, sprTextures, &clip, &tmp, direction, &cntr, SDL_FLIP_NONE);
-		
-		if(colormod != WHITE)
-			SDL_SetTextureColorMod(sprTextures, 255, 255, 255);
-
 	}
 
+	if(colormod != WHITE)
+		SDL_SetTextureColorMod(sprTextures, 255, 255, 255);
+	
 	if(DEBUG){
 		SDL_Rect cbox = colBox();
 		SDL_RenderDrawRect(winRenderer, &cbox);
@@ -483,4 +481,5 @@ void Object::objDump(){
 	printf("\tWidth, Height: (%d,%d\n", posRect.w, posRect.h);
 	printf("\tbBox: (%d, %d, %d, %d)\n", bBox.x, bBox.y, bBox.w, bBox.h);
 	printf("\tSolid: %s\n", solid?"true":"false");
+	printf("\tColorMod: %s\n", colorNames[colormod]);
 }

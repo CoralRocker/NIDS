@@ -17,7 +17,7 @@
 //#include "object.hpp"
 //#include "naomi.hpp"
 
-const short SCREEN_WIDTH = 640;//1152;
+const short SCREEN_WIDTH = 480;//1152;
 const short SCREEN_HEIGHT = 480;//852;
 extern bool DEBUG, SHOW_FPS, DRAW_GRID, FULLSCREEN; // Used to be const, but better to be on/off-able.
 extern uint8_t FPS;

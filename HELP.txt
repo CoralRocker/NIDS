@@ -34,3 +34,5 @@ WARNING: Object placement is still a WIP, and is therefore unfinished and rudime
 * Better color selection UI
 * Refactor object menu selection
 * Improve the game's controls
+* Completely remove dependency on external DLLs (zlib1 and libpng16)
+* Test and improve game performance??? 

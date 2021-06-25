@@ -14,6 +14,8 @@ void loadSave(const char* savefile){
 	for(int i = 0; i < numObjs; i++){
 		SAVE_OBJ obj;
 		fread(&obj, sizeof(SAVE_OBJ), 1, sf);
+		
+		// Loading Naomi is different than for regular objects.
 		if(obj.type == NAOMI){
 			puts("Found Naomi");
 			Naomi* n = new Naomi();
@@ -61,13 +63,16 @@ void save(const char* savefile){
 	fwrite(&numObjs, sizeof(int), 1, sf);
 
 	for(auto& x: objects){
+
+		// Create a struct SAVE_OBJ using an initializer list then
+		// write to a file.
 		SAVE_OBJ obj = {
 			((Object*)x)->image_side, ((Object*)x)->image_index, ((Object*)x)->image_speed,
 			((Object*)x)->depth, ((Object*)x)->direction, ((Object*)x)->id,
 			((Object*)x)->posRect, ((Object*)x)->clip, ((Object*)x)->bBox,
 			((Object*)x)->type,
 			((Object*)x)->solid, ((Object*)x)->visible, ((Object*)x)->moving,
-			((Object*)x)->type == NAOMI ? ((Naomi*)x)->objcolmod : ((Object*)x)->colormod
+			((Object*)x)->type == NAOMI ? ((Naomi*)x)->objcolmod : ((Object*)x)->colormod // Save either the object's color or Naomi's color choice.
 		};
 		fwrite(&obj, sizeof(SAVE_OBJ), 1, sf);
 	}

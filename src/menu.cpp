@@ -55,6 +55,7 @@ Menu::~Menu(){
 	if(DEBUG) puts("destroyed Menu");	
 }
 
+// Stretch the menu text box;
 SDL_Rect Menu::stretch(float x, float y){
 	SDL_Rect tBox = txtRect;
 	tBox.w = (uint16_t) nearbyint(tBox.w * x);
@@ -66,6 +67,10 @@ SDL_Rect Menu::stretch(float factor){
 	return stretch(factor, factor);
 }
 
+// The input method does the legwork of controlling the menu options and taking user input.
+// It's not self-documenting code by any means but its relatively clear to me right now.
+// It'll bite me in the ass later, but that's a later me problem. Ha. Future me doesn't know
+// what's gonna hit 'im.
 void Menu::input(SDL_Keycode sym){
 	switch(sym){
 		case SDLK_p:
@@ -134,6 +139,7 @@ void Menu::input(SDL_Keycode sym){
 							naomi->objcolmod = (ColorCodes)sel[1];
 							break;
 						case 3:
+							// Exit and Save Game
 							*naomi->quit = true;
 							objects.push_back(naomi);
 							save("sav.nidsav");
@@ -144,7 +150,7 @@ void Menu::input(SDL_Keycode sym){
 			}
 			break;
 		case SDLK_ESCAPE:
-			if(sel.size() == 1 && *pause){sel[0]=0;*pause = 1 - (*pause);break;}
+			if(sel.size() == 1 && *pause){sel[0]=0;*pause = 1 - (*pause);break;} // Quit the menu if the time is right.
 			while(sel.size() > 1){
 				sel.pop_back();
 			}
@@ -156,6 +162,7 @@ void Menu::input(SDL_Keycode sym){
 				case 0:{
 					if(++sel[1] == OBJ_MAX) sel[1] = 0;
 					bool exit = false;
+					// Skip over non placeable objects
 					while(!exit){
 						switch(sel[1]){
 							case NAOMI:
@@ -181,11 +188,13 @@ void Menu::input(SDL_Keycode sym){
 			}
 			break;
 		case SDLK_DOWN:
-			if(!(sel.size() == 2)) break; 
+			if(!(sel.size() == 2)) break; // Only used for submenus
 			switch(sel[0]){
 				case 0:{
 					if(sel[1]-- == 0) sel[1] = OBJ_MAX - 1;
 					bool exit = false;
+
+					// Skip over non-placeable objects
 					while(!exit){
 						switch(sel[1]){
 							case NAOMI:
@@ -214,22 +223,17 @@ void Menu::input(SDL_Keycode sym){
 }
 
 void Menu::draw(){
-	//char* str = new char[32];
-	// sprintf(str, "Paused: %s", *pause ? "True" : "False");
-	// if(DEBUG) puts(str);
-	// renderText({0, 0, 0,0}, str, LBLUE, fontSml);
-	// delete[] str;
-
-
 	if(!game_pause) return;
-	
+
+	// Initial Menu Box
 	SDL_Rect tBox;
 	tBox = stretch(SCREEN_WIDTH/256.f, 0.75);
 	tBox.y = SCREEN_HEIGHT - 96;
 	SDL_RenderCopy(winRenderer, textBox, NULL, &tBox);
 
-	TTF_Font* fnt = fontSml;
+	TTF_Font* fnt = fontSml; // Font variable used to draw text
 
+	// Draw basal menu options
 	for(int i = 0; i < 4; i++){
 		switch(i){
 			case 0:
@@ -250,8 +254,11 @@ void Menu::draw(){
 				break;
 		}
 	}
+
+	// Draw submenus if necessary
 	if(sel.size() == 2){
 		switch(sel[0]){
+			// Object Selection Wheel Drawing
 			case 0: {
 				tBox = stretch(0.75, 2);
 				tBox.x = SCREEN_WIDTH/5 - tBox.w/2;
@@ -268,6 +275,8 @@ void Menu::draw(){
 				}
 				break;
 				}
+			
+			// Game Option Screen
 			case 1:
 				tBox = stretch(1, (MENU_MAX*0.5));
 				tBox.x = SCREEN_WIDTH/5 * 2 - tBox.w/2;
@@ -298,6 +307,8 @@ void Menu::draw(){
 					delete[] tmpstr;
 				}
 				break;
+
+			// Color Wheel Drawing
 			case 2: {
 				tBox = stretch(0.75, 2);
 				tBox.x = SCREEN_WIDTH/5 * 3 - tBox.w/2;
@@ -314,6 +325,8 @@ void Menu::draw(){
 				}
 				break;
 				}
+
+			// Save and Exit Confirmation
 			case 3:
 				tBox = stretch(0.75, 0.5);
 				tBox.x = SCREEN_WIDTH/5 * 4 - tBox.w/2;

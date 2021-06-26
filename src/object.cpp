@@ -323,7 +323,7 @@ Object* Object::step(){
 		direction = 90 * (rand() % 4);
 		getFrameClip(direction / 90, 0);
 		correctAngle();
-		image_speed = 2;
+		image_speed = 4;
 	}
 
 	if(moving){
@@ -345,6 +345,8 @@ Object* Object::step(){
 		if(success){
 			posRect.x += dcos(direction);
 			posRect.y += dsin(direction);
+		}else{
+			moving = false;
 		}
 
 		depth = posRect.y;

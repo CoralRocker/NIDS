@@ -16,3 +16,6 @@ The windows release package is available [here](https://github.com/CoralRocker/N
 * Recreate the color selection UI to be more communicative
 * Add color modification mode option?
 * Refactor object menu selection
+* Finish Maggie
+* Remove glitching wall bug when placing modular table
+* Improve performance?

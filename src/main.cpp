@@ -128,7 +128,7 @@ int main(int argc, char** argv){
 
 		// MISC Objects
 		objects.push_back(new Object(MAGGIE, 180, 180, objects.size()));
-		((Object*)objects.back())->getFrameClip(3, 0)->image_speed = 4;
+		((Object*)objects.back())->image_speed = 4;
 
 	}else{
 		// Load from save

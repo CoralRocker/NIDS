@@ -19,6 +19,7 @@ SDL_Window* win = NULL;
 SDL_Renderer* winRenderer = NULL;
 TTF_Font *fontLrg = NULL, *fontMed = NULL, *fontSml = NULL;
 
+short MAGGIE_MOVE = 64;
 bool game_pause = false, DEBUG=false, SHOW_FPS=false, DRAW_GRID=false, FULLSCREEN=false;
 
 uint8_t FPS = 60;

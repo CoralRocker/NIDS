@@ -3,10 +3,10 @@
 #include "menu.hpp"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <stdio.h>
+#include <cstdio>
 #include <string>
-#include <stdint.h>
-#include <stdlib.h>
+#include <cstdint>
+#include <cstdlib>
 #include <cmath>
 
 /** Hardcoded Data that tells the game what is contained in the spritesheets.
@@ -309,28 +309,58 @@ Object* Object::resetSize(){
 	return this;
 }
 
-/** Retrieve an object's information from
- * the csv file provided. This function was
- * deprecated by the adding of hardcoded 
- * default values. 
- */
-// void Object::readCSV(std::string csv){
-// 	FILE* fp = fopen(csv.c_str(), "r");
-// 	
-// 	char* sprite_path = (char*)malloc(128);
-// 
-// 	fscanf(fp, "%d,%d,%d,%d,%s", &numImg, &numSubImg, &posRect.w, &posRect.h, sprite_path);
-// 	
-// 	getFrameClip(0,0);
-// 	
-// 	free(sprite_path);
-// 	fclose(fp);
-// }
 
-/** Not actually used for objects
+/** Used only for maggie so far
  */
 Object* Object::step(){
-	// if(game_pause) return this; // TODO: Uncomment when step method gets filled.
+	if(game_pause) return this;
+	if(type != MAGGIE) return this;
+
+	short dir = rand() % (MAGGIE_MOVE * 3);
+	
+	if(!moving && dir == 1){
+		moving = true;
+		direction = 90 * (rand() % 4);
+		getFrameClip(direction / 90, 0);
+		correctAngle();
+		image_speed = 2;
+	}
+
+	if(moving){
+	
+		bool success = true;
+
+		SDL_Rect place = colBox();
+		place.y -= dsin(direction)*8;
+		place.x += dcos(direction)*8;
+		for(std::vector<void*>::iterator it = objects.begin(); it != objects.end(); it++){
+			if(!((Object*)*it)->solid) continue;
+			if(*it == this) continue;	
+			SDL_Rect tBox = ((Object*)*it)->colBox();
+			SDL_bool res = SDL_HasIntersection(&place, &tBox);
+			if(res == SDL_TRUE)
+				success = false;
+		}
+
+		if(success){
+			posRect.x += dcos(direction);
+			posRect.y += dsin(direction);
+		}
+
+		depth = posRect.y;
+
+		if((rand() % 3 == 0) && posRect.x % 8 == 0 && posRect.y % 8 == 0) moving = false;
+	}else{
+		if(image_index % 2){
+			if(++image_index >= numSubImg) image_index = 0;
+		}
+
+		image_speed = 0;
+		if(posRect.x%8) posRect.x -= 1;
+		if(posRect.y%8) posRect.y -= 1;
+	}
+	
+
 
 	return this;
 }	
@@ -339,6 +369,26 @@ void Object::correctAngle(){
 	SDL_Rect pos = posRect, box = bBox;
 	
 	switch(numImg){
+		case 4:
+			switch(direction){
+				case 180:
+				case 0:
+					resetSize();
+					break;
+				case 270:
+				case 90:
+					double xFact = bBox.x / (double)posRect.w;
+					double yFact = bBox.y / (double)posRect.h;
+					bBox.x = std::nearbyint(xFact * posRect.h);
+					bBox.y = std::nearbyint(yFact * posRect.w);
+					bBox.w = (bBox.w/(double)posRect.w)*posRect.h;
+					bBox.h = (bBox.h/(double)posRect.h)*posRect.w;
+					
+					posRect.w = posRect.h;
+					posRect.h = pos.w;
+					break;
+			}
+			break;
 		case 2:
 			switch(direction){
 				case 0:
@@ -347,9 +397,6 @@ void Object::correctAngle(){
 				case 90:
 					double xFact = bBox.x / (double)posRect.w;
 					double yFact = bBox.y / (double)posRect.h;
-					printf("Xfact: %f, Yfact: %f\n", xFact, yFact);
-					printf("bBox.x: %d posRect.w: %d\n", bBox.x, posRect.w);
-					printf("bBox.y: %d posRect.h: %d\n", bBox.y, posRect.h);
 					bBox.x = std::nearbyint(xFact * posRect.h);
 					bBox.y = std::nearbyint(yFact * posRect.w);
 					bBox.w = (bBox.w/(double)posRect.w)*posRect.h;
@@ -404,9 +451,29 @@ Object* Object::draw(){
 	if(numImg == 1 || id == 0xffff) // If only one side or if is Naomi
 		SDL_RenderCopy(winRenderer, sprTextures, &clip, &posRect); 
 	else{
-		SDL_Rect tmp = {posRect.x+(direction!=0?posRect.w:0), posRect.y, clip.w, clip.h};
+		SDL_Rect tmp;
+		switch(numImg){
+			case 2:
+				tmp = {posRect.x+(direction!=0?clip.h:0), posRect.y, clip.w, clip.h};
+				break;
+			case 4:
+				tmp = {posRect.x, posRect.y, clip.w, clip.h};
+				switch(direction){
+					case 90:
+						tmp.x += clip.h;
+						break;
+					case 180:
+						tmp.x += clip.w;
+						tmp.y += clip.h;
+						break;
+					case 270:
+						tmp.y += clip.w;
+						break;
+				}
+				break;
+		}
 		SDL_Point cntr = {0,0};
-		SDL_RenderCopyEx(winRenderer, sprTextures, &clip, &tmp, direction, &cntr, SDL_FLIP_NONE);
+		SDL_RenderCopyEx(winRenderer, sprTextures, &clip, &tmp, direction, &cntr, direction == 180? SDL_FLIP_VERTICAL : SDL_FLIP_NONE);
 	}
 
 	if(colormod != WHITE)

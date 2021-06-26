@@ -37,3 +37,4 @@ WARNING: Object placement is still a WIP, and is therefore unfinished and rudime
 * Improve the game's controls
 * Completely remove dependency on external DLLs (zlib1 and libpng16)
 * Test and improve game performance??? 
+* Fix glitching wall bug

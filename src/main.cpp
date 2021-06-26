@@ -18,7 +18,7 @@
 int main(int argc, char** argv){
 
 	// If DEBUG build...
-	DEBUG = true;
+	// DEBUG = true;
 
 	// Start SDL
 	if(init() != true){
@@ -98,6 +98,10 @@ int main(int argc, char** argv){
 		//R
 		objects.push_back(new Object(SIDE_WALL, SCREEN_WIDTH-32, 0, objects.size()));
 		((Object*)objects.back())->stretch(1, SCREEN_HEIGHT/64.f);
+			
+		// B 
+		objects.push_back(new Object(SIDE_WALL, 0, SCREEN_HEIGHT, objects.size()));
+		((Object*)objects.back())->stretchFitX(SCREEN_WIDTH);
 		
 		//Right Mid wall
 		objects.push_back(new Object(WALL, 32, SCREEN_HEIGHT/2, objects.size()));
